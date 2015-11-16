@@ -6,8 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MessageRouting.Shared.Model;
 
-namespace TestFormPublisher.Service
+namespace MessageRouting.Shared.Service
 {
     public class SignalrPublisher : ISignalrPublisher
     {
@@ -41,6 +42,7 @@ namespace TestFormPublisher.Service
             //connection.TraceLevel = TraceLevels.All;            
             //TextWriter
             //connection.TraceWriter 
+
 
             //ServicePointManager.DefaultConnectionLimit = 10;
             

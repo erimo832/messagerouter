@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using MessageRoutingHub.Common;
+using MessageRouting.Shared.Model;
 
 namespace MessageRoutingHub.Service
 {

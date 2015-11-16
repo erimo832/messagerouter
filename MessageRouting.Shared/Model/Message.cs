@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestFormPublisher
+namespace MessageRouting.Shared.Model
 {
     public class Message
     {

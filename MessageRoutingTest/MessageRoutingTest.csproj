@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageRoutingHost\MessageRoutingHost.csproj">
+    <ProjectReference Include="..\MessageRoutingHost\MessageRouting.Host.csproj">
       <Project>{4a03689e-e840-4ece-baaa-dbad9788c812}</Project>
-      <Name>MessageRoutingHost</Name>
+      <Name>MessageRouting.Host</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

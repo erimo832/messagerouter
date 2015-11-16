@@ -116,6 +116,12 @@
   <ItemGroup>
     <Folder Include="Model\ValueObjects\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MessageRouting.Shared\MessageRouting.Shared.csproj">
+      <Project>{0c524f92-128e-4f04-a8a6-8aa2d65699b9}</Project>
+      <Name>MessageRouting.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
