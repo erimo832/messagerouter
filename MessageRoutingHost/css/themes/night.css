@@ -1,0 +1,25 @@
+﻿body {
+    margin: 0;
+    background-color: #343434;    
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0em;
+}
+
+ul li {
+    color: #999999;
+}
+
+.critical {
+    /*color: #FFCE28; yellow*/
+    color: #CCCCCC;
+    /*background-color: #451717;*/
+    font-size: 1.1em;
+}
+
+.time {
+    float: left;
+    padding-right: 0.5em;
+}

@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="/css/messageviewer.css" rel="stylesheet" />
+    <!-- theme reference -->
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
+
+    <script src="/Scripts/jquery-1.6.4.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="/signalr/hubs"></script>
+
+    <script src="Scripts/queryparam.js"></script>
+    <script src="Scripts/theme.js"></script>  
+    <script src="Scripts/datetime.js"></script>  
+
+    <script type="text/javascript">
+    $(function () {
+
+        // Declare a proxy to reference the hub.
+        var msghub = $.connection.messageRoutingBus;
+
+        var rowcnt = 10;
+        var currentCnt = 0;
+        var topic = ['#'];
+
+        $('#serverStatus').hide();
+
+        function registerToServer() {
+            var name = getQueryParam("name");
+
+            //setup params
+            var len = getQueryParam("rowcnt");
+            if (len != null) {
+                rowcnt = len;
+            }
+
+            var topics = getQueryParam("topic");
+            if (topics != null) {
+                topic = topics.split(",");
+            }
+
+            if (name == null) {
+                var msg =
+                    "<p>I need parameters to work! </p>" +
+                    "Valid parameters:<br />" +
+                    " - name <br />" +
+                    " - topic (separate with , for multiple topics) <br />" +
+                    " - rowcnt (how many rows of data that should be visible) <br />" +
+                    " - theme (name of theme on server like 'night') <br />" +
+                    " - size (base font-size) <br />" +
+                    " - timeformat <br />" +
+                    "<p>Example: <br />" +
+                    "messageviewer.html?name=xyz&topic='topic1','topic2'&stylesheetname=night </p>";
+
+                $('#message').html(msg);
+
+                return;
+            }
+
+            msghub.server.subscribe(name, topic);
+        }
+
+
+        /*******************************************
+        * register server events
+        *******************************************/
+
+        msghub.client.connectionEstablished = function (message) {
+            var encodedMsg = $('<div />').text(message).html();
+
+            $('#serverStatus').text(encodedMsg);
+            $('#serverStatus').show();
+
+            //Show for only 10sec
+            setTimeout(function () {
+                $('#serverStatus').hide();
+            }, 10000);
+        };
+
+
+        msghub.client.newMessage = function (json) {
+            var msg = jQuery.parseJSON(json);
+
+            //could do ++ up to limit the always remove/add
+            var cnt = $('#msgList li').length;
+
+            currentCnt++;
+
+            if (currentCnt > rowcnt) {
+                //remove last
+                $('#msgList li:last').remove();
+            }
+                       
+            var timeStamp = getFormatedTime();
+
+            //add new message post
+            $('#msgList').prepend('<li class=' + msg.Level + '>' + timeStamp + ' <div>' + msg.Text + '</div></li>');
+        };
+
+
+
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+            registerToServer();
+        });
+
+
+        $.connection.hub.disconnected(function () {
+            $('#serverStatus').text("disconnected from server, lasterror: " + $.connection.hub.lastError.message);
+            $('#serverStatus').show();
+
+            //reconnect
+            setTimeout(function () {
+                $.connection.hub.start().done(function () {
+                    registerToServer();
+                    $('#serverStatus').hide();
+                });
+            }, 5000); // Restart connection after 5 seconds.
+
+        });
+
+        $.connection.hub.reconnecting(function () {
+            $('#serverStatus').text("reconnecting to server");
+            $('#serverStatus').show();
+        });
+
+        $.connection.hub.reconnected(function () {
+            $('#serverStatus').text("reconnected to server");
+            $('#serverStatus').show();
+            registerToServer();
+
+            //Show for only 10sec
+            setTimeout(function () {
+                $('#serverStatus').hide();
+            }, 10000);
+        });
+
+
+        $(document).ready(function () {
+            /*$('#message').click(function () {
+                showSlide();
+            });*/
+        });
+
+
+    });
+    </script>
+
+</head>
+<body style="margin: 0;">    
+    <div id="serverStatus" class="error">
+    </div>
+
+    <div id="message">
+    </div>
+
+    <ul id="msgList">
+
+    </ul>
+
+</body>
+</html>

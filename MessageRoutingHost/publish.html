@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="/css/messageviewer.css" rel="stylesheet" />
+
+    <!-- theme reference -->
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
+
+    <script src="/Scripts/jquery-1.6.4.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="/signalr/hubs"></script>
+
+    <script src="Scripts/queryparam.js"></script>    
+    <script src="Scripts/theme.js"></script>    
+
+    <script type="text/javascript">
+
+
+    $(function () {
+        
+
+        // Declare a proxy to reference the hub.
+        var msghub = $.connection.messageRoutingBus;
+
+        $('#serverStatus').hide();
+
+
+        /*******************************************
+        * register server events
+        *******************************************/
+
+        msghub.client.connectionEstablished = function (message) {
+            var encodedMsg = $('<div />').text(message).html();
+
+            $('#serverStatus').text(encodedMsg);
+            $('#serverStatus').show();
+
+            //Show for only 10sec
+            setTimeout(function () {
+                $('#serverStatus').hide();
+            }, 10000);
+        };
+
+
+
+
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+            //registerToServer();
+        });
+
+
+        $.connection.hub.disconnected(function () {
+            $('#serverStatus').text("disconnected from server, lasterror: " + $.connection.hub.lastError.message);
+            $('#serverStatus').show();
+
+            //reconnect
+            setTimeout(function () {
+                $.connection.hub.start().done(function () {                    
+                    $('#serverStatus').hide();
+                });
+            }, 5000); // Restart connection after 5 seconds.
+
+        });
+
+        $.connection.hub.reconnecting(function () {
+            $('#serverStatus').text("reconnecting to server");
+            $('#serverStatus').show();
+        });
+
+        $.connection.hub.reconnected(function () {
+            $('#serverStatus').text("reconnected to server");
+            $('#serverStatus').show();
+            //registerToServer();
+
+            //Show for only 10sec
+            setTimeout(function () {
+                $('#serverStatus').hide();
+            }, 10000);
+        });
+
+
+        $(document).ready(function () {
+            
+            /*var theme = getQueryParam("css");
+            
+            if (!(theme == null || theme == "")) {
+                $("head link#theme").attr("href", "/css/themes/" + theme + ".css");
+            }*/
+
+        });
+
+        $.connection.hub.start().done(function () {
+            $('#publish').click(function () {
+
+                var message = {
+                    topic: $('#topic').val(),
+                    level: $('#level').val(),
+                    text: $('#text').val()
+                };
+
+                //Publish da message
+                msghub.server.publish(message);
+            });
+        });
+
+
+    });
+    </script>
+
+</head>
+<body>
+    <div id="serverStatus" class="error">
+    </div>
+
+    <input type="text" id="topic" value="topic" />
+    <input type="text" id="level" value="level" />
+    <input type="text" id="text" value="message" />
+    <input type="button" id="publish" value="publish" />
+
+</body>
+</html>
