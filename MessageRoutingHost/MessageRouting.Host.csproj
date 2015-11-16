@@ -108,7 +108,6 @@
     <Compile Include="Common\JsonHelper.cs" />
     <Compile Include="Service\MessageRoutingBus.cs" />
     <Compile Include="Model\ClientConnection.cs" />
-    <Compile Include="Model\Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\TopicRouter.cs" />
     <Compile Include="Startup.cs" />
