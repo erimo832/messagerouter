@@ -14,7 +14,11 @@ namespace MessageRoutingHub.Service
     public class MessageRoutingBus : Hub
     {
         /* 
-         * EPS - error per seconds
+         * Add some stats
+         * 
+         * EPH - error per hour
+         * ...
+         * keep local db or in memory?
          * 
          * 
          */
@@ -80,7 +84,7 @@ namespace MessageRoutingHub.Service
                 ClientList = obj;                
             }
 
-            PushConnectionEstablished(new[] { Context.ConnectionId }, string.Format("Hi, {0}", name));
+            PushConnectionEstablished(new[] { Context.ConnectionId }, string.Format("Subscription registried for {0}", name));
         }
 
         

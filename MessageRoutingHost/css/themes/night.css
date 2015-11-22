@@ -9,12 +9,12 @@ ul {
 }
 
 ul li {
-    color: #999999;
+    color: #AAAAAA;
 }
 
 .critical {
     /*color: #FFCE28; yellow*/
-    color: #CCCCCC;
+    color: #DDDDDD;
     /*background-color: #451717;*/
     font-size: 1.1em;
 }
