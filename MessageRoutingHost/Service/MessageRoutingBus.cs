@@ -84,7 +84,7 @@ namespace MessageRoutingHub.Service
                 ClientList = obj;                
             }
 
-            PushConnectionEstablished(new[] { Context.ConnectionId }, string.Format("Subscription registried for {0}", name));
+            PushConnectionEstablished(new[] { Context.ConnectionId }, string.Format("Subscription registered for {0}", name));
         }
 
         
