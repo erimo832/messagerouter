@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MessageRouting.Shared.Model;
+﻿using MessageRouting.Shared.Model;
+using System;
 
 namespace MessageRouting.Shared.Service
 {
