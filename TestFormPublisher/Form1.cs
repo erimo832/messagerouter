@@ -28,15 +28,23 @@ namespace TestFormPublisher
 
             //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
             //Publiser = new SignalrPublisher(@"http://sesden822:8122/", "MessageRoutingBus");
-            Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
+            //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
+            Publiser = new SignalrPublisher(@"http://192.168.1.8/", "MessageRoutingBus");
 
             Publiser.StatusChanged += Publiser_StatusChanged;
         }
 
         void Publiser_StatusChanged(object sender, string e)
         {
+            if (lblStatus.InvokeRequired)
+            {
+                Invoke(new Action(() => Publiser_StatusChanged(sender, e)));
+            }
+
             lblStatus.Text = e;
         }
+
+
 
         private void bntPublish_Click(object sender, EventArgs e)
         {
