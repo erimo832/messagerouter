@@ -26,6 +26,8 @@ namespace TestFormPublisher
             // http://localhost:50107/
             // MessageRoutingBus  
 
+            //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
+            //Publiser = new SignalrPublisher(@"http://sesden822:8122/", "MessageRoutingBus");
             Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
 
             Publiser.StatusChanged += Publiser_StatusChanged;
