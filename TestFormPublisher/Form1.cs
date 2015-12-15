@@ -27,7 +27,7 @@ namespace TestFormPublisher
             // MessageRoutingBus  
 
             //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
-            //Publiser = new SignalrPublisher(@"http://sesden822:8122/", "MessageRoutingBus");
+            //Publiser = new SignalrPublisher(@"http://SESDEN822.vcn.ds.volvo.net:8122/", "MessageRoutingBus");
             //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
             Publiser = new SignalrPublisher(@"http://192.168.1.8/", "MessageRoutingBus");
 

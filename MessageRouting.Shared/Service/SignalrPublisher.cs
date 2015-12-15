@@ -53,7 +53,7 @@ namespace MessageRouting.Shared.Service
             {
                 connection = new HubConnection(host);
                 PublisherHubProxy = connection.CreateHubProxy(hubName);
-
+                
                 //for reconnect
                 connection.Closed += ConnectionClosed;
                 
