@@ -17,7 +17,7 @@ namespace MessageRoutingHub
             app.Map("/signalr", map =>
             {
                 map.UseCors(CorsOptions.AllowAll);
-                var hubConfiguration = new HubConfiguration { EnableJSONP = true };
+                var hubConfiguration = new HubConfiguration { EnableJSONP = true };                
                 map.RunSignalR(hubConfiguration);
             });
 

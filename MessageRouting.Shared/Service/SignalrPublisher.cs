@@ -53,7 +53,7 @@ namespace MessageRouting.Shared.Service
             {
                 connection = new HubConnection(host);
                 PublisherHubProxy = connection.CreateHubProxy(hubName);
-                
+  
                 //for reconnect
                 connection.Closed += ConnectionClosed;
                 
@@ -61,7 +61,7 @@ namespace MessageRouting.Shared.Service
                 connection.StateChanged += ConnectionStateChanged;
                 connection.Error += ConnectionError;
                                 
-                //could have an wait or await on it. If its squence is importans
+                //could have an wait or await on it. If its sequence is importans
                 connection.Start();
             }
         }

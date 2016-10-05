@@ -29,10 +29,12 @@ namespace TestFormPublisher
             //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
             //Publiser = new SignalrPublisher(@"http://SESDEN822.vcn.ds.volvo.net:8122/", "MessageRoutingBus");
             //Publiser = new SignalrPublisher(@"http://localhost:50107/", "MessageRoutingBus");
-            Publiser = new SignalrPublisher(@"http://192.168.1.8/", "MessageRoutingBus");
+            //Publiser = new SignalrPublisher(@"http://192.168.1.61/signalr/", "MessageRoutingBus");
 
-            Publiser.StatusChanged += Publiser_StatusChanged;
+            //Publiser.StatusChanged += Publiser_StatusChanged;
         }
+
+        
 
         void Publiser_StatusChanged(object sender, string e)
         {
@@ -43,9 +45,7 @@ namespace TestFormPublisher
 
             lblStatus.Text = e;
         }
-
-
-
+        
         private void bntPublish_Click(object sender, EventArgs e)
         {
             var msg = new MessageRouting.Shared.Model.Message 
@@ -58,7 +58,18 @@ namespace TestFormPublisher
             Publiser.Publish(msg);
         }
 
+        private void btnStartPublisher_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Publiser = new SignalrPublisher(tbxHostName.Text, tbxHub.Text);
 
-
+                Publiser.StatusChanged += Publiser_StatusChanged;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

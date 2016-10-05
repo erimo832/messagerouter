@@ -33,6 +33,9 @@
             this.tbxLevel = new System.Windows.Forms.TextBox();
             this.bntPublish = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.tbxHostName = new System.Windows.Forms.TextBox();
+            this.tbxHub = new System.Windows.Forms.TextBox();
+            this.btnStartPublisher = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbxTopic
@@ -72,17 +75,46 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(519, 64);
+            this.lblStatus.Location = new System.Drawing.Point(12, 240);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(37, 13);
             this.lblStatus.TabIndex = 4;
             this.lblStatus.Text = "Status";
+            // 
+            // tbxHostName
+            // 
+            this.tbxHostName.Location = new System.Drawing.Point(12, 176);
+            this.tbxHostName.Name = "tbxHostName";
+            this.tbxHostName.Size = new System.Drawing.Size(315, 20);
+            this.tbxHostName.TabIndex = 5;
+            this.tbxHostName.Text = "http://192.168.1.61/signalr/";
+            // 
+            // tbxHub
+            // 
+            this.tbxHub.Location = new System.Drawing.Point(333, 176);
+            this.tbxHub.Name = "tbxHub";
+            this.tbxHub.Size = new System.Drawing.Size(315, 20);
+            this.tbxHub.TabIndex = 6;
+            this.tbxHub.Text = "MessageRoutingBus";
+            // 
+            // btnStartPublisher
+            // 
+            this.btnStartPublisher.Location = new System.Drawing.Point(12, 202);
+            this.btnStartPublisher.Name = "btnStartPublisher";
+            this.btnStartPublisher.Size = new System.Drawing.Size(135, 23);
+            this.btnStartPublisher.TabIndex = 7;
+            this.btnStartPublisher.Text = "Connect";
+            this.btnStartPublisher.UseVisualStyleBackColor = true;
+            this.btnStartPublisher.Click += new System.EventHandler(this.btnStartPublisher_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(766, 462);
+            this.Controls.Add(this.btnStartPublisher);
+            this.Controls.Add(this.tbxHub);
+            this.Controls.Add(this.tbxHostName);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.bntPublish);
             this.Controls.Add(this.tbxLevel);
@@ -102,6 +134,9 @@
         private System.Windows.Forms.TextBox tbxLevel;
         private System.Windows.Forms.Button bntPublish;
         private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.TextBox tbxHostName;
+        private System.Windows.Forms.TextBox tbxHub;
+        private System.Windows.Forms.Button btnStartPublisher;
     }
 }
 
