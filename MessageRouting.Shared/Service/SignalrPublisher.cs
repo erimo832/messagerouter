@@ -1,6 +1,8 @@
 ﻿using MessageRouting.Shared.Model;
 using Microsoft.AspNet.SignalR.Client;
 using System;
+using System.Data;
+using ConnectionState = Microsoft.AspNet.SignalR.Client.ConnectionState;
 
 namespace MessageRouting.Shared.Service
 {
@@ -49,20 +51,27 @@ namespace MessageRouting.Shared.Service
 
         private void Connect()
         {
-            if (PublisherHubProxy == null || connection.State != ConnectionState.Connected)
+            try
             {
-                connection = new HubConnection(host);
-                PublisherHubProxy = connection.CreateHubProxy(hubName);
-  
-                //for reconnect
-                connection.Closed += ConnectionClosed;
-                
-                //most for logging
-                connection.StateChanged += ConnectionStateChanged;
-                connection.Error += ConnectionError;
-                                
-                //could have an wait or await on it. If its sequence is importans
-                connection.Start();
+                if (PublisherHubProxy == null || connection.State != ConnectionState.Connected)
+                {
+                    connection = new HubConnection(host);
+                    PublisherHubProxy = connection.CreateHubProxy(hubName);
+
+                    //for reconnect
+                    connection.Closed += ConnectionClosed;
+
+                    //most for logging
+                    connection.StateChanged += ConnectionStateChanged;
+                    connection.Error += ConnectionError;
+
+                    //could have an wait or await on it. If its sequence is importans
+                    connection.Start().Wait();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
 

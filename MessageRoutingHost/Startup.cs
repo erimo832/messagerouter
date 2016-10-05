@@ -5,11 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Microsoft.Owin;
+//using Microsoft.Owin;
+//using Owin;
 
 namespace MessageRoutingHub
 {
-    [assembly: OwinStartup(typeof(MessageRoutingHub.Startup))]
+    //[assembly: OwinStartup(typeof(MessageRoutingHub.Startup))]
     public class Startup
     {
         public void Configuration(IAppBuilder app)

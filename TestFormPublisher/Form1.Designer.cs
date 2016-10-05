@@ -40,33 +40,37 @@
             // 
             // tbxTopic
             // 
-            this.tbxTopic.Location = new System.Drawing.Point(12, 12);
+            this.tbxTopic.Location = new System.Drawing.Point(16, 15);
+            this.tbxTopic.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbxTopic.Name = "tbxTopic";
-            this.tbxTopic.Size = new System.Drawing.Size(315, 20);
+            this.tbxTopic.Size = new System.Drawing.Size(419, 22);
             this.tbxTopic.TabIndex = 0;
             this.tbxTopic.Text = "topic";
             // 
             // tbxMessage
             // 
-            this.tbxMessage.Location = new System.Drawing.Point(12, 64);
+            this.tbxMessage.Location = new System.Drawing.Point(16, 79);
+            this.tbxMessage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbxMessage.Name = "tbxMessage";
-            this.tbxMessage.Size = new System.Drawing.Size(315, 20);
+            this.tbxMessage.Size = new System.Drawing.Size(419, 22);
             this.tbxMessage.TabIndex = 1;
             this.tbxMessage.Text = "message";
             // 
             // tbxLevel
             // 
-            this.tbxLevel.Location = new System.Drawing.Point(12, 38);
+            this.tbxLevel.Location = new System.Drawing.Point(16, 47);
+            this.tbxLevel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbxLevel.Name = "tbxLevel";
-            this.tbxLevel.Size = new System.Drawing.Size(315, 20);
+            this.tbxLevel.Size = new System.Drawing.Size(419, 22);
             this.tbxLevel.TabIndex = 2;
             this.tbxLevel.Text = "level";
             // 
             // bntPublish
             // 
-            this.bntPublish.Location = new System.Drawing.Point(184, 90);
+            this.bntPublish.Location = new System.Drawing.Point(245, 111);
+            this.bntPublish.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.bntPublish.Name = "bntPublish";
-            this.bntPublish.Size = new System.Drawing.Size(143, 23);
+            this.bntPublish.Size = new System.Drawing.Size(191, 28);
             this.bntPublish.TabIndex = 3;
             this.bntPublish.Text = "Publish";
             this.bntPublish.UseVisualStyleBackColor = true;
@@ -75,33 +79,37 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(12, 240);
+            this.lblStatus.Location = new System.Drawing.Point(16, 295);
+            this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(37, 13);
+            this.lblStatus.Size = new System.Drawing.Size(48, 17);
             this.lblStatus.TabIndex = 4;
             this.lblStatus.Text = "Status";
             // 
             // tbxHostName
             // 
-            this.tbxHostName.Location = new System.Drawing.Point(12, 176);
+            this.tbxHostName.Location = new System.Drawing.Point(16, 217);
+            this.tbxHostName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbxHostName.Name = "tbxHostName";
-            this.tbxHostName.Size = new System.Drawing.Size(315, 20);
+            this.tbxHostName.Size = new System.Drawing.Size(419, 22);
             this.tbxHostName.TabIndex = 5;
-            this.tbxHostName.Text = "http://192.168.1.61/signalr/";
+            this.tbxHostName.Text = "http://sesden822:8122/signalr/";
             // 
             // tbxHub
             // 
-            this.tbxHub.Location = new System.Drawing.Point(333, 176);
+            this.tbxHub.Location = new System.Drawing.Point(444, 217);
+            this.tbxHub.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbxHub.Name = "tbxHub";
-            this.tbxHub.Size = new System.Drawing.Size(315, 20);
+            this.tbxHub.Size = new System.Drawing.Size(419, 22);
             this.tbxHub.TabIndex = 6;
             this.tbxHub.Text = "MessageRoutingBus";
             // 
             // btnStartPublisher
             // 
-            this.btnStartPublisher.Location = new System.Drawing.Point(12, 202);
+            this.btnStartPublisher.Location = new System.Drawing.Point(16, 249);
+            this.btnStartPublisher.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnStartPublisher.Name = "btnStartPublisher";
-            this.btnStartPublisher.Size = new System.Drawing.Size(135, 23);
+            this.btnStartPublisher.Size = new System.Drawing.Size(180, 28);
             this.btnStartPublisher.TabIndex = 7;
             this.btnStartPublisher.Text = "Connect";
             this.btnStartPublisher.UseVisualStyleBackColor = true;
@@ -109,9 +117,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 462);
+            this.ClientSize = new System.Drawing.Size(1021, 569);
             this.Controls.Add(this.btnStartPublisher);
             this.Controls.Add(this.tbxHub);
             this.Controls.Add(this.tbxHostName);
@@ -120,6 +128,7 @@
             this.Controls.Add(this.tbxLevel);
             this.Controls.Add(this.tbxMessage);
             this.Controls.Add(this.tbxTopic);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);

@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace MessageRoutingHub.Service
 {
+    //[HubName("MessageRoutingBus")]
     public class MessageRoutingBus : Hub
     {
         /* 
