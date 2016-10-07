@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MessageRoutingHub.Service;
+using MessageRoutingHub.Common.Extensions;
 
 namespace MessageRoutingTest
 {
@@ -201,12 +202,15 @@ namespace MessageRoutingTest
         {
             var delimiter = '.';
 
-            var pubTopic = TopicRouter.ConvertToStack("123.789", delimiter);            
-            var subTopic = TopicRouter.ConvertToStack("789.#", delimiter);
+            var pubTopic = TopicRouter.ConvertToStack("abc.efg", delimiter);
+            var subTopic1 = TopicRouter.ConvertToStack("abc.hij", delimiter);
+            var subTopic2 = TopicRouter.ConvertToStack("efg.#", delimiter);
 
-            var result = TopicRouter.MatchTopic(pubTopic, subTopic, false);
-
+            var result = TopicRouter.MatchTopic(pubTopic.Clone(), subTopic1, false);
             Assert.AreEqual(result, false);
+
+            var result2 = TopicRouter.MatchTopic(pubTopic.Clone(), subTopic2, false);
+            Assert.AreEqual(result2, false);
         }
 
         #endregion
