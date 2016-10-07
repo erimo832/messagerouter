@@ -196,6 +196,19 @@ namespace MessageRoutingTest
             Assert.AreEqual(result, true);
         }
 
+        [TestMethod]
+        public void TopicMatchMultiple1()
+        {
+            var delimiter = '.';
+
+            var pubTopic = TopicRouter.ConvertToStack("123.789", delimiter);            
+            var subTopic = TopicRouter.ConvertToStack("789.#", delimiter);
+
+            var result = TopicRouter.MatchTopic(pubTopic, subTopic, false);
+
+            Assert.AreEqual(result, false);
+        }
+
         #endregion
     }
 }

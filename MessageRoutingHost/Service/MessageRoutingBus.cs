@@ -11,19 +11,9 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace MessageRoutingHub.Service
 {
-    //[HubName("MessageRoutingBus")]
+    
     public class MessageRoutingBus : Hub
     {
-        /* 
-         * Add some stats
-         * 
-         * EPH - error per hour
-         * ...
-         * keep local db or in memory?
-         * 
-         * 
-         */
-
         #region properties
 
         public static ObjectCache Cache = MemoryCache.Default;
@@ -125,6 +115,5 @@ namespace MessageRoutingHub.Service
         } 
 
         #endregion
-
     }
 }

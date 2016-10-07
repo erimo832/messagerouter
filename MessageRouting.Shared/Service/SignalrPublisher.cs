@@ -8,7 +8,6 @@ namespace MessageRouting.Shared.Service
 {
     public class SignalrPublisher : ISignalrPublisher
     {
-        //for testing
         public event EventHandler<string> StatusChanged;
 
         #region private members
@@ -25,22 +24,8 @@ namespace MessageRouting.Shared.Service
 
         public SignalrPublisher(string hostName, string hub)
         {
-            /*             
-             // Could be taken from app config directly?
-             // If not found just don't start it
-             // http://localhost:50107/
-             // MessageRoutingBus             
-             */
-
             host = hostName;
             hubName = hub;
-            
-            //connection.TraceLevel = TraceLevels.All;            
-            //TextWriter
-            //connection.TraceWriter 
-
-
-            //ServicePointManager.DefaultConnectionLimit = 10;
             
             Connect();
         }
