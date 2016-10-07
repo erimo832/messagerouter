@@ -1,6 +1,7 @@
 ﻿using MessageRouting.Shared.Model;
 using MessageRoutingHub.Model;
 using System.Collections.Generic;
+using MessageRoutingHub.Common.Extensions;
 
 namespace MessageRoutingHub.Service
 {
@@ -17,7 +18,7 @@ namespace MessageRoutingHub.Service
             {
                 foreach (var subStack in client.TopicStack)
                 {
-                    if(MatchTopic(topicStack, subStack, false))
+                    if (MatchTopic(topicStack.Clone(), subStack, false))
                     {
                         //Add client to subscription list
                         result.Add(client);
@@ -32,8 +33,6 @@ namespace MessageRoutingHub.Service
             // duga.#.error
             // duga.sde.*.*.datastorage.*.error
 
-            //String.CompareOrdinal()
-            
             return result;
         }
 
