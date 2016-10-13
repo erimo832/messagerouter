@@ -105,6 +105,9 @@
     <Content Include="css\themes\nightcream.css" />
     <Content Include="css\themes\sand.css" />
     <Content Include="css\themes\terminal.css" />
+    <Content Include="messagechart.html" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\jquery-2.2.1.js" />
     <Content Include="Scripts\jquery-2.2.1.min.js" />
     <Content Include="Scripts\jquery-2.2.1.min.map" />
@@ -127,6 +130,7 @@
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
+    <Content Include="Scripts\messagerouterconnection.js" />
     <Content Include="Scripts\queryparam.js" />
     <Content Include="Scripts\theme.js" />
     <Content Include="Web.config" />

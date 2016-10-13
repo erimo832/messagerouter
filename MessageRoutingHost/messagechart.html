@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="/css/messageviewer.css" rel="stylesheet" />
+    <!-- theme reference -->
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
+
+    <!--<script src="Scripts/json2.js"></script>-->
+
+    <script src="Scripts/jquery-2.2.1.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="signalr/hubs"></script>
+
+    <!-- test chart js -->
+    <script src="Scripts/Chart.js"></script>
+
+    <script src="Scripts/messagerouterconnection.js"></script>
+    <script src="Scripts/queryparam.js"></script>
+    <script src="Scripts/theme.js"></script>
+    <script src="Scripts/datetime.js"></script>
+
+
+    <script type="text/javascript">
+    $(function () {
+        
+
+
+        //chart defaults
+        Chart.defaults.global.legend.display = false;
+
+        function getData() {
+
+            var data = {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        //label: "My First dataset",
+                       /* backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],*/
+                        borderWidth: 0,
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                    }
+                ]
+            };
+
+            return data;
+        }
+
+
+        $(document).ready(function () {
+            var msghub = startSignalrConnection("");
+
+
+            //register for event
+            msghub.client.newMessage = function (json) {
+                var msg = jQuery.parseJSON(json);
+
+                //Level
+                //Text
+                //Topic
+
+
+                var data = getData();
+
+                var ctx = $("#myChart");
+
+                var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: false
+                    }
+                });
+            };
+        });
+
+        /*
+
+        params:
+        - width
+        - height
+        - Split by topic level ex 't1.t1', 't2.t2' topiclevel=0 will give count of #=2, topiclevel=1 will give t1=1 and t2=1
+        
+        */
+
+    });
+    </script>
+
+</head>
+<body style="margin: 0;">
+    <div id="serverStatus" class="error">
+    </div>
+
+    <div id="message">
+    </div>
+
+    <canvas id="myChart" width="800" height="400"></canvas>
+
+
+</body>
+</html>
