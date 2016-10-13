@@ -12,6 +12,7 @@
     <script src="Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="signalr/hubs"></script>
     
+    <script src="Scripts/messagerouterconnection.js"></script>
     <script src="Scripts/queryparam.js"></script>
     <script src="Scripts/theme.js"></script>  
     <script src="Scripts/datetime.js"></script>  
@@ -20,31 +21,7 @@
     <script type="text/javascript">
     $(function () {
 
-        // Declare a proxy to reference the hub.
-        var msghub = $.connection.messageRoutingBus;
-
-        var rowcnt = 10;
-        var currentCnt = 0;
-        var topic = ['#'];
-
-        $('#serverStatus').hide();
-
-        function registerToServer() {
-            var name = getQueryParam("name");
-
-            //setup params
-            var len = getQueryParam("rowcnt");
-            if (len != null) {
-                rowcnt = len;
-            }
-
-            var topics = getQueryParam("topic");
-            if (topics != null) {
-                topic = topics.split(",");
-            }
-
-            if (name == null) {
-                var msg =
+        var msg =
                     "<p>I need parameters to work! </p>" +
                     "Valid parameters:<br />" +
                     " - name <br />" +
@@ -56,94 +33,28 @@
                     "<p>Example: <br />" +
                     "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&stylesheetname=night</p>";
 
-                $('#message').html(msg);
-
-                return;
-            }
-
-            msghub.server.subscribe(name, topic);
-        }
-
-
-        /*******************************************
-        * register server events
-        *******************************************/
-
-        msghub.client.connectionEstablished = function (message) {
-            var encodedMsg = $('<div />').text(message).html();
-
-            $('#serverStatus').text(encodedMsg);
-            $('#serverStatus').show();
-
-            //Show for only 10sec
-            setTimeout(function () {
-                $('#serverStatus').hide();
-            }, 10000);
-        };
-
-
-        msghub.client.newMessage = function (json) {
-            var msg = jQuery.parseJSON(json);
-
-            //could do ++ up to limit the always remove/add
-            var cnt = $('#msgList li').length;
-
-            currentCnt++;
-
-            if (currentCnt > rowcnt) {
-                //remove last
-                $('#msgList li:last').remove();
-            }
-                       
-            var timeStamp = getFormatedTime();
-
-            //add new message post
-            $('#msgList').prepend('<li class=' + msg.Level + '>' + timeStamp + ' <div>' + msg.Text + '</div></li>');
-        };
-
-
-
-        // Start the connection.
-        $.connection.hub.start().done(function () {
-            registerToServer();
-        });
-
-
-        $.connection.hub.disconnected(function () {
-            $('#serverStatus').text("disconnected from server, lasterror: " + $.connection.hub.lastError.message);
-            $('#serverStatus').show();
-
-            //reconnect
-            setTimeout(function () {
-                $.connection.hub.start().done(function () {
-                    registerToServer();
-                    $('#serverStatus').hide();
-                });
-            }, 5000); // Restart connection after 5 seconds.
-
-        });
-
-        $.connection.hub.reconnecting(function () {
-            $('#serverStatus').text("reconnecting to server");
-            $('#serverStatus').show();
-        });
-
-        $.connection.hub.reconnected(function () {
-            $('#serverStatus').text("reconnected to server");
-            $('#serverStatus').show();
-            registerToServer();
-
-            //Show for only 10sec
-            setTimeout(function () {
-                $('#serverStatus').hide();
-            }, 10000);
-        });
-
-
         $(document).ready(function () {
-            /*$('#message').click(function () {
-                showSlide();
-            });*/
+            var msghub = startSignalrConnection(msg);
+
+            msghub.client.newMessage = function (json) {
+                var msg = jQuery.parseJSON(json);
+
+                //could do ++ up to limit the always remove/add
+                var cnt = $('#msgList li').length;
+
+                currentCnt++;
+
+                if (currentCnt > rowcnt) {
+                    //remove last
+                    $('#msgList li:last').remove();
+                }
+
+                var timeStamp = getFormatedTime();
+
+                //add new message post
+                $('#msgList').prepend('<li class=' + msg.Level + '>' + timeStamp + ' <div>' + msg.Text + '</div></li>');
+            };
+
         });
 
 
