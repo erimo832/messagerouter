@@ -15,7 +15,7 @@
     <script src="Scripts/Chart.js"></script>
 
     <script src="Scripts/messagerouterconnection.js"></script>
-    <script src="Scripts/queryparam.js"></script>
+    <script src="Scripts/common.js"></script>
     <script src="Scripts/theme.js"></script>
     <script src="Scripts/datetime.js"></script>
 
@@ -28,81 +28,52 @@
         //Chartist.js http://gionkunz.github.io/chartist-js/
         //some more here https://www.sitepoint.com/15-best-javascript-charting-libraries/
 
-
         var msg =
                     "<p>I need parameters to work! </p>" +
                     "Valid parameters:<br />" +
                     " - name <br />" +
                     " - width <br />" +
                     " - height <br />" +
+                    " - aggregatelevel (what topic level should it be aggregated on) <br />" +
                     " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
                     " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
                     " - size (base font-size) <br />" +
                     "<p>Example: <br />" +
-                    "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&stylesheetname=night</p>";
+                    "messagechart.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
 
-                
-        function getStyleRuleValue(style, selector) {
-            for (var i = 0; i < document.styleSheets.length; i++) {
-                var mysheet = document.styleSheets[i];
-                var myrules = mysheet.cssRules ? mysheet.cssRules : mysheet.rules;
-                for (var j = 0; j < myrules.length; j++) {
-                    if (myrules[j].selectorText && myrules[j].selectorText.toLowerCase() === selector) {
-                        return myrules[j].style[style];
-                    }
-                }
-
-            }
-        };
-
-        /*
-
-        params:
-        - width
-        - height
-        - Split by topic level ex 't1.t1', 't2.t2' topiclevel=0 will give count of #=2, topiclevel=1 will give t1=1 and t2=1
-
-        
-        */
 
         /*TODO:
         - Refactor this file
+            - Move "common" dataset handling
         - Refactor signalr connection
-        - Use params
-            - Width
-            - Height
-            - size
-            - the other like the log
+            - Split connection
+            - Subscribe part
+            - Publish part
         - Spider chart option
         - Test other js chart library
         - Add reset data counter button
         - Add last reset time somewhere small
         - Create group by day, bars for one "topic"
-
         */
 
         //chart defaults
         Chart.defaults.global.legend.display = false;
         Chart.defaults.global.defaultFontStyle = "bold";
         
-
         var ctx = $("#chart");
         var myBarChart;
-
         //default settings
-        var sumlevel = 2;
         var dataset = [];
-
-
-        function addMessageToDataset(msg)
+        
+        function addMessageToDataset(msg, aggregatelevel)
         {
             var topic = msg.Topic;
 
             //get the name that it should sum under
             var parts = topic.split(".");
             var name = "";
-            if (parts.length > sumlevel) {
-                for (var i = 0; i < sumlevel; i++) {
+            if (parts.length > aggregatelevel) {
+                for (var i = 0; i < aggregatelevel; i++) {
                     if (i == 0) {
                         name = parts[i];
                     }
@@ -158,15 +129,22 @@
         }
 
         $(document).ready(function () {
-            var msghub = startSignalrConnection("");
+            var msghub = startSignalrConnection(msg);
+            var fontSize = getQueryParam("size", 16);
+            var agglevel = getQueryParam("aggregatelevel", 4);
 
-
+            //Set size of chart
+            var width = getQueryParam("width", 800);
+            var height = getQueryParam("height", 400);
+            $("#chart").attr("width", width);
+            $("#chart").attr("height", height);
+            
             //register for event
             msghub.client.newMessage = function (json) {
                 var msg = jQuery.parseJSON(json);
                 //Level, Text, Topic
 
-                addMessageToDataset(msg);
+                addMessageToDataset(msg, agglevel);
 
                 var data = createChartJsDataset();
 
@@ -185,25 +163,21 @@
                             mode: 'x-axis'
                         },
                         scales: {
-                            xAxes: [{
-                                scaleLabel: {
-                                  
-                                },
+                            xAxes: [{                                
                                 gridLines: {
                                     color: gridcolor
                                 },
                                 ticks: {
-                                    fontSize: 20,
+                                    fontSize: fontSize,
                                     fontColor: gridcolor
                                 }
-
                             }],
                             yAxes: [{                                
                                 gridLines: {
                                     color: gridcolor
                                 },
                                 ticks: {
-                                    fontSize: 20,
+                                    fontSize: fontSize,
                                     fontColor: gridcolor,
                                     beginAtZero: true
                                 }
@@ -213,9 +187,6 @@
                 });               
             };
         });
-
-        
-
     });
     </script>
 

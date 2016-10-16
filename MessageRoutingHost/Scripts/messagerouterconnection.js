@@ -10,8 +10,6 @@ Example:
 
 
 var infoMsg;
-var rowcnt = 10;
-var currentCnt = 0;
 var topic = ['#'];
 
 function startSignalrConnection(msg)
@@ -26,23 +24,9 @@ function startSignalrConnection(msg)
     return msghub;
 }
 
-//$(document).ready(function () {
-
-    // Declare a proxy to reference the hub.
-    //var msghub = $.connection.messageRoutingBus;
-
-
-
-    
 
 function registerToServer(msghub) {
     var name = getQueryParam("name");
-
-    //setup params
-    var len = getQueryParam("rowcnt");
-    if (len != null) {
-        rowcnt = len;
-    }
 
     var topics = getQueryParam("topic");
     if (topics != null) {
@@ -50,21 +34,7 @@ function registerToServer(msghub) {
     }
 
     if (name == null) {
-        /*var msg =
-            "<p>I need parameters to work! </p>" +
-            "Valid parameters:<br />" +
-            " - name <br />" +
-            " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
-            " - rowcnt (how many rows of data that should be visible) <br />" +
-            " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
-            " - size (base font-size) <br />" +
-            " - timeformat <br />" +
-            "<p>Example: <br />" +
-            "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&stylesheetname=night</p>";
-            */
-
         $('#message').html(infoMsg);
-
         return;
     }
 
@@ -125,4 +95,3 @@ function registerForEvents(msghub) {
         }, 10000);
     });
 }
-//});

@@ -13,7 +13,7 @@
     <script src="signalr/hubs"></script>
     
     <script src="Scripts/messagerouterconnection.js"></script>
-    <script src="Scripts/queryparam.js"></script>
+    <script src="Scripts/common.js"></script>
     <script src="Scripts/theme.js"></script>  
     <script src="Scripts/datetime.js"></script>  
    
@@ -31,9 +31,12 @@
                     " - size (base font-size) <br />" +
                     " - timeformat <br />" +
                     "<p>Example: <br />" +
-                    "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&stylesheetname=night</p>";
+                    "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
 
         $(document).ready(function () {
+            var rowcnt = getQueryParam("rowcnt", 10);
+            var currentCnt = 0;
+
             var msghub = startSignalrConnection(msg);
 
             msghub.client.newMessage = function (json) {

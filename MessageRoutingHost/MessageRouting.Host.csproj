@@ -131,7 +131,7 @@
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\messagerouterconnection.js" />
-    <Content Include="Scripts\queryparam.js" />
+    <Content Include="Scripts\common.js" />
     <Content Include="Scripts\theme.js" />
     <Content Include="Web.config" />
   </ItemGroup>
