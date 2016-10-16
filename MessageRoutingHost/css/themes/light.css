@@ -24,3 +24,12 @@ ul li {
     float: left;
     padding-right: 0.5em;
 }
+
+
+.chart-color {
+    color: rgba(0,0,0,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(0,0,0,0.8);
+}

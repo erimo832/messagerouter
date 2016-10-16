@@ -34,6 +34,15 @@ ul li {
     padding-right: 0.5em;
 }
 
+
+.chart-color {
+    color: rgba(125,107,209,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(125,107,209,0.8);
+}
+
 @font-face {       
 	 font-family: "C64 User";
 	 src: url("/css/themes/c64/C64_User_v1.0-STYLE.eot");

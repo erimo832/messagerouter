@@ -14,8 +14,7 @@ ul li {
     color: #393d3f;
 }
 
-.critical {
-    /*color: #FFCE28; yellow*/
+.critical {    
     color: #393d3f;
     background-color: #dfdfd8;
     font-size: 1.1em;
@@ -24,4 +23,12 @@ ul li {
 .time {
     float: left;
     padding-right: 0.5em;
+}
+
+.chart-color {
+    color: rgba(150,100,0,0.1);
+}
+
+.chart-grid-color {
+    color: rgba(150,100,0,0.1);
 }

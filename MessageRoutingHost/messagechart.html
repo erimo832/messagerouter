@@ -1,8 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-    <link href="/css/messageviewer.css" rel="stylesheet" />
+    <title></title>    
     <!-- theme reference -->
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
 
@@ -29,41 +28,134 @@
         //Chartist.js http://gionkunz.github.io/chartist-js/
         //some more here https://www.sitepoint.com/15-best-javascript-charting-libraries/
 
+
+        var msg =
+                    "<p>I need parameters to work! </p>" +
+                    "Valid parameters:<br />" +
+                    " - name <br />" +
+                    " - width <br />" +
+                    " - height <br />" +
+                    " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
+                    " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
+                    " - size (base font-size) <br />" +
+                    "<p>Example: <br />" +
+                    "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&stylesheetname=night</p>";
+
+                
+        function getStyleRuleValue(style, selector) {
+            for (var i = 0; i < document.styleSheets.length; i++) {
+                var mysheet = document.styleSheets[i];
+                var myrules = mysheet.cssRules ? mysheet.cssRules : mysheet.rules;
+                for (var j = 0; j < myrules.length; j++) {
+                    if (myrules[j].selectorText && myrules[j].selectorText.toLowerCase() === selector) {
+                        return myrules[j].style[style];
+                    }
+                }
+
+            }
+        };
+
+        /*
+
+        params:
+        - width
+        - height
+        - Split by topic level ex 't1.t1', 't2.t2' topiclevel=0 will give count of #=2, topiclevel=1 will give t1=1 and t2=1
+
+        
+        */
+
+        /*TODO:
+        - Refactor this file
+        - Refactor signalr connection
+        - Use params
+            - Width
+            - Height
+            - size
+            - the other like the log
+        - Spider chart option
+        - Test other js chart library
+        - Add reset data counter button
+        - Add last reset time somewhere small
+        - Create group by day, bars for one "topic"
+
+        */
+
         //chart defaults
         Chart.defaults.global.legend.display = false;
+        Chart.defaults.global.defaultFontStyle = "bold";
+        
 
-        function getData() {
+        var ctx = $("#chart");
+        var myBarChart;
+
+        //default settings
+        var sumlevel = 2;
+        var dataset = [];
+
+
+        function addMessageToDataset(msg)
+        {
+            var topic = msg.Topic;
+
+            //get the name that it should sum under
+            var parts = topic.split(".");
+            var name = "";
+            if (parts.length > sumlevel) {
+                for (var i = 0; i < sumlevel; i++) {
+                    if (i == 0) {
+                        name = parts[i];
+                    }
+                    else {
+                        name = name + "." + parts[i];
+                    }
+                }
+            }
+            else {
+                name = topic;
+            }
+
+            //add in dataset
+            var found = false;
+            for (var i = 0; i < dataset.length; i++) {
+                if (dataset[i].name == name) {
+                    dataset[i].data = dataset[i].data + 1;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                var item = { name: name, data: 1 };
+                dataset.push(item);
+            }
+        }
+
+        function createChartJsDataset() {
+            
+            var labels = [];
+            var datapoints = [];
+
+            //could do it like .chart-color-1 .... .chart-color-default, to support multiple
+            var color = getStyleRuleValue('color', '.chart-color');
+            var backgroundcolors = [];
+            for (var i = 0; i < dataset.length; i++) {
+                backgroundcolors.push(color);
+            }            
 
             var data = {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: dataset.map(function (x) { return x.name }),                
                 datasets: [
                     {
-                        //label: "My First dataset",
-                       /* backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],*/
-                        borderWidth: 0,
-                        data: [65, 59, 80, 81, 56, 55, 40],
+                        backgroundColor: backgroundcolors,
+                        borderWidth: 1,                        
+                        data: dataset.map(function (x) { return x.data }),
                     }
                 ]
             };
 
             return data;
         }
-
 
         $(document).ready(function () {
             var msghub = startSignalrConnection("");
@@ -72,34 +164,57 @@
             //register for event
             msghub.client.newMessage = function (json) {
                 var msg = jQuery.parseJSON(json);
+                //Level, Text, Topic
 
-                //Level
-                //Text
-                //Topic
+                addMessageToDataset(msg);
 
+                var data = createChartJsDataset();
 
-                var data = getData();
+                if (myBarChart != null) {
+                    myBarChart.destroy();
+                }
 
-                var ctx = $("#myChart");
-
-                var myBarChart = new Chart(ctx, {
+                var gridcolor = getStyleRuleValue('color', '.chart-grid-color');
+                
+                myBarChart = new Chart(ctx, {                    
                     type: 'bar',
                     data: data,
                     options: {
-                        responsive: false
+                        responsive: false,
+                        hover: {                          
+                            mode: 'x-axis'
+                        },
+                        scales: {
+                            xAxes: [{
+                                scaleLabel: {
+                                  
+                                },
+                                gridLines: {
+                                    color: gridcolor
+                                },
+                                ticks: {
+                                    fontSize: 20,
+                                    fontColor: gridcolor
+                                }
+
+                            }],
+                            yAxes: [{                                
+                                gridLines: {
+                                    color: gridcolor
+                                },
+                                ticks: {
+                                    fontSize: 20,
+                                    fontColor: gridcolor,
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                });
+                });               
             };
         });
 
-        /*
-
-        params:
-        - width
-        - height
-        - Split by topic level ex 't1.t1', 't2.t2' topiclevel=0 will give count of #=2, topiclevel=1 will give t1=1 and t2=1
         
-        */
 
     });
     </script>
@@ -112,7 +227,7 @@
     <div id="message">
     </div>
 
-    <canvas id="myChart" width="800" height="400"></canvas>
+    <canvas id="chart" width="800" height="400"></canvas>
 
 
 </body>

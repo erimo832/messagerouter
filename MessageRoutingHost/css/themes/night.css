@@ -13,14 +13,21 @@ ul li {
     color: #AAAAAA;
 }
 
-.critical {
-    /*color: #FFCE28; yellow*/
-    color: #DDDDDD;
-    /*background-color: #451717;*/
+.critical { 
+    color: #DDDDDD; 
     font-size: 1.1em;
 }
 
 .time {
     float: left;
     padding-right: 0.5em;
+}
+
+
+.chart-color {
+    color: rgba(221,221,221,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(221,221,221,0.8);
 }

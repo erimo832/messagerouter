@@ -29,6 +29,15 @@ ul li {
     padding-right: 0.5em;
 }
 
+.chart-color {
+    color: rgba(2,255,4,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(2,255,4,0.8);
+}
+
+
 @font-face {       
 	 font-family: "terminal";
 	 src: url("/css/themes/terminal/Glass_TTY_VT220.ttf") format("truetype");
