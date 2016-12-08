@@ -71,5 +71,32 @@ namespace TestFormPublisher
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void btnStartEmulation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int cnt = Convert.ToInt32(tbxSendCount.Text);
+
+                for (int i = 0; i < cnt; i++)
+                {
+                    var msg = new MessageRouting.Shared.Model.Message
+                    {
+                        Topic = tbxTopicEmulation.Text.Replace("[0]", i.ToString()),
+                        Text = tbxMessageEmulation.Text.Replace("[0]", i.ToString()),
+                        Level = tbxLevelEmulation.Text.Replace("[0]", i.ToString())
+                    };
+
+                    Publiser.Publish(msg);
+
+                    lblEmulationStats.Text = string.Format("Stats: \r\n # {0}", i);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
