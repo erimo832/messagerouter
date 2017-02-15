@@ -57,14 +57,29 @@
                 $('#msgList').prepend('<li class=' + msg.Level + '>' + timeStamp + ' <div>' + msg.Text + '</div></li>');
             };
 
+            msghub.client.resetView = function (viewType) {
+                if (viewType == "all" || viewType == "list") {
+                    resetView();
+                }
+            };
+
+            $('#body').keyup(function (event) {
+                if (event.which == 82) {
+                    resetView();
+                }
+            });
+
+            function resetView() {
+                $('#msgList li').remove();
+
+                currentCnt = 0;
+            }
         });
-
-
     });
     </script>
 
 </head>
-<body style="margin: 0;">    
+<body id="body" style="margin: 0;">    
     <div id="serverStatus" class="error">
     </div>
 

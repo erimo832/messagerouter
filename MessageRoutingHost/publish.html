@@ -102,6 +102,20 @@
             });
         });
 
+        $.connection.hub.start().done(function () {
+            $('#publishResetAll').click(function () {
+                //Publish da message
+                msghub.server.publishResetView("all");
+            });
+            $('#publishResetChart').click(function () {
+                //Publish da message
+                msghub.server.publishResetView("chart");
+            });
+            $('#publishResetList').click(function () {
+                //Publish da message
+                msghub.server.publishResetView("list");
+            });
+        });
 
     });
     </script>
@@ -110,11 +124,17 @@
 <body>
     <div id="serverStatus" class="error">
     </div>
-
-    <input type="text" id="topic" value="topic" />
-    <input type="text" id="level" value="level" />
-    <input type="text" id="text" value="message" />
-    <input type="button" id="publish" value="publish" />
-
+    <div>
+        <input type="text" id="topic" value="topic" />
+        <input type="text" id="level" value="level" />
+        <input type="text" id="text" value="message" />
+        <input type="button" id="publish" value="publish" />
+    </div>
+    <div>
+        <p>Publish reset events (to all subscribers)</p>
+        <input type="button" id="publishResetAll" value="reset all"/>
+        <input type="button" id="publishResetChart" value="reset charts"/>
+        <input type="button" id="publishResetList" value="reset lists"/>
+    </div>
 </body>
 </html>

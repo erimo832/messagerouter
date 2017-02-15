@@ -97,8 +97,16 @@ namespace MessageRoutingHub.Service
             }
         }
 
+        private void PushResetViewToClients(string[] connectionIds, string viewType)
+        {
+            foreach (var connectionId in connectionIds)
+            {
+                Task.Run(() => Clients.Client(connectionId).ResetView(viewType));
+            }
+        }
+
         #endregion
-        
+
         #region publication
 
         public void Publish(Message msg)
@@ -112,7 +120,16 @@ namespace MessageRoutingHub.Service
                     PushMessageToClients(subs.Select(x => x.ConnectionId).ToArray(), msg);
             }
             catch { /* avoid unhandled exceptions */ }
-        } 
+        }
+
+        public void PublishResetView(string viewType)
+        {
+            try
+            {
+                PushResetViewToClients(ClientList.Select(x => x.ConnectionId).ToArray(), viewType);
+            }
+            catch { /* avoid unhandled exceptions */ }
+        }
 
         #endregion
     }

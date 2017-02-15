@@ -169,6 +169,12 @@
             $("#chart").attr("height", height);
             
             //register for event
+            msghub.client.resetView = function (viewType) {
+                if (viewType == "all" || viewType == "chart") {
+                    resetView();
+                }
+            };
+
             msghub.client.newMessage = function (json) {
                 var msg = jQuery.parseJSON(json);
                 //Level, Text, Topic
@@ -215,12 +221,27 @@
                     }
                 });               
             };
+
+            $('#body').keyup(function (event) {
+                if (event.which == 82) {
+                    resetView();
+                }
+            });
+
+            function resetView() {
+                //Clear dataset
+                dataset = [];
+
+                if (myBarChart != null) {
+                    myBarChart.destroy();
+                }
+            }
         });
     });
     </script>
 
 </head>
-<body style="margin: 0;">
+<body id="body" style="margin: 0;">
     <div id="serverStatus" class="error">
     </div>
 
