@@ -91,7 +91,8 @@ namespace MessageRouting.Shared.Service
             {
                 if (connection.State == ConnectionState.Connected)
                 {
-                    PublisherHubProxy.Invoke("Publish", msg);
+                    var task = PublisherHubProxy.Invoke("Publish", msg);
+                    task.Wait();
                 }
 
             }
