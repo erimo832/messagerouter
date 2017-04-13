@@ -86,7 +86,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="sendSystemMessage.ps" />
+    <None Include="sendSystemMessage.ps1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
