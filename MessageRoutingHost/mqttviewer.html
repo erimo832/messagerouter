@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>    
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
+
+    <script src="Scripts/mqttws31.js"></script>
+    <script src="Scripts/jquery-2.2.1.min.js"></script> 
+    
+    <script src="Scripts/common.js"></script>
+    <script src="Scripts/theme.js"></script> 
+    <script src="Scripts/datetime.js"></script>  
+       
+    <script type="text/javascript">
+        //Some other 
+        var currentCnt = 0;
+        var rowcnt = getQueryParam("rowcnt", 10);
+
+        //Using the HiveMQ public Broker, with a random client Id
+        var client = new Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
+
+        //Gets  called if the websocket/mqtt connection gets disconnected for any reason
+        client.onConnectionLost = function (responseObject) {
+            //Depending on your scenario you could implement a reconnect logic here
+            alert("connection lost: " + responseObject.errorMessage);
+        };
+
+        //Gets called whenever you receive a message for your subscriptions
+        client.onMessageArrived = function (message) {
+            //Do something with the push message you received
+            //$('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
+            //could do ++ up to limit the always remove/add
+            var cnt = $('#msgList li').length;
+
+            currentCnt++;
+
+            if (currentCnt > rowcnt) {
+                //remove last
+                $('#msgList li:last').remove();
+            }
+
+            var timeStamp = getFormatedTime();
+
+            //add new message post
+            $('#msgList').prepend('<li>' + timeStamp + ' <div>' + message.payloadString + ' ' + message.destinationName + '</div></li>');
+        };
+
+        //Connect Options
+        var options = {
+            timeout: 3,
+            //Gets Called if the connection has sucessfully been established
+            onSuccess: function () {
+                alert("Connected");
+            },
+            //Gets Called if the connection could not be established
+            onFailure: function (message) {
+                alert("Connection failed: " + message.errorMessage);
+            }
+        };
+
+        //Creates a new Messaging.Message Object and sends it to the HiveMQ MQTT Broker
+        var publish = function (payload, topic, qos) {
+            //Send your message (also possible to serialize it as JSON or protobuf or just use a string, no limitations)
+            var message = new Messaging.Message(payload);
+            message.destinationName = topic;
+            message.qos = qos;
+            client.send(message);
+        }
+    </script>
+	<meta charset="utf-8" />
+</head>
+<body>
+    <button onclick="client.connect(options);">1. Connect</button>
+    <button onclick="client.subscribe('testtopic/#', {qos: 2}); alert('Subscribed');">2. Subscribe</button>
+    <button onclick="publish('Hello Foo !','testtopic/bar',2);">3. Publish</button>
+    <button onclick="client.disconnect();">(4. Disconnect)</button>
+    <div id="messages"></div>
+
+    <div id="message">
+    </div>
+
+    <ul id="msgList"></ul>
+
+</body>
+</html>
