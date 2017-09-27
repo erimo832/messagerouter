@@ -15,10 +15,12 @@
         //Some other 
         var currentCnt = 0;
         var rowcnt = getQueryParam("rowcnt", 10);
+        var brokerUrl = getQueryParam("brokerUrl", "broker.mqttdashboard.com");
+        var brokerport = Number(getQueryParam("brokerport", 8000));
 
         //Using the HiveMQ public Broker, with a random client Id
-        var client = new Messaging.Client("broker.mqttdashboard.com", 8000, "myclientid_" + parseInt(Math.random() * 100, 10));
-
+        var client = new Messaging.Client(brokerUrl, brokerport, "myclientid_" + parseInt(Math.random() * 100, 10));
+        
         //Gets  called if the websocket/mqtt connection gets disconnected for any reason
         client.onConnectionLost = function (responseObject) {
             //Depending on your scenario you could implement a reconnect logic here
@@ -27,9 +29,6 @@
 
         //Gets called whenever you receive a message for your subscriptions
         client.onMessageArrived = function (message) {
-            //Do something with the push message you received
-            //$('#messages').append('<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>');
-            //could do ++ up to limit the always remove/add
             var cnt = $('#msgList li').length;
 
             currentCnt++;
