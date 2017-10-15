@@ -133,8 +133,16 @@
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\messagerouterconnection.js" />
     <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\mqttws31.js" />
     <Content Include="Scripts\theme.js" />
+    <Content Include="Scripts\View\commoncharts.js" />
+    <Content Include="View\Chart\barchart.html" />
+    <Content Include="View\Chart\linechart.html" />
+    <Content Include="View\Chart\scatterchart.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

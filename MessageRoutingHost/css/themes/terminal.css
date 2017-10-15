@@ -34,7 +34,11 @@ ul li {
 }
 
 .chart-grid-color {
-    color: rgba(2,255,4,0.8);
+    color: rgba(2,255,4,0.4);
+}
+
+.chart-font-family {
+    font-family: "terminal", sans-serif !important;
 }
 
 

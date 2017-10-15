@@ -51,9 +51,11 @@ $messagePublisher = New-Object MessageRouting.Shared.Service.SignalrPublisher -a
 
 #create an message
 $message = New-Object MessageRouting.Shared.Model.Message
+$message.Topic = $topic;
+
 $message.Level = $level;
 $message.Text = $messagetext;
-$message.Topic = $topic;
+
 
 $messagePublisher.Publish($message);
 

@@ -7,3 +7,11 @@
 ul {
     margin: 0px;
 }
+
+.chart-color {
+    color: rgba(255,216,0,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(255,216,0,0.2);
+}

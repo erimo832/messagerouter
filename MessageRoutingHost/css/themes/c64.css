@@ -34,13 +34,16 @@ ul li {
     padding-right: 0.5em;
 }
 
-
 .chart-color {
-    color: rgba(125,107,209,0.8);
+    color: rgba(125,107,209,0.9);
 }
 
 .chart-grid-color {
-    color: rgba(125,107,209,0.8);
+    color: rgba(125,107,209,0.2);
+}
+
+.chart-font-family {
+    font-family: 'C64 User';
 }
 
 @font-face {       

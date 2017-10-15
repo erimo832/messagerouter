@@ -33,36 +33,41 @@
             this.tbxLevel = new System.Windows.Forms.TextBox();
             this.bntPublish = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
-            this.tbxHostName = new System.Windows.Forms.TextBox();
             this.tbxHub = new System.Windows.Forms.TextBox();
             this.btnStartPublisher = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tbxSendCount = new System.Windows.Forms.TextBox();
             this.btnStartEmulation = new System.Windows.Forms.Button();
-            this.Single = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tcMessages = new System.Windows.Forms.TabControl();
+            this.tpMessage = new System.Windows.Forms.TabPage();
+            this.tpEmulation = new System.Windows.Forms.TabPage();
+            this.lblEmulationStats = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbxTopicEmulation = new System.Windows.Forms.TextBox();
             this.tbxMessageEmulation = new System.Windows.Forms.TextBox();
             this.tbxLevelEmulation = new System.Windows.Forms.TextBox();
-            this.lblEmulationStats = new System.Windows.Forms.Label();
-            this.Single.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tpDataValue = new System.Windows.Forms.TabPage();
+            this.tbxDvValue = new System.Windows.Forms.TextBox();
+            this.tbxDvTimestamp = new System.Windows.Forms.TextBox();
+            this.btnDvNow = new System.Windows.Forms.Button();
+            this.cbHost = new System.Windows.Forms.ComboBox();
+            this.tcMessages.SuspendLayout();
+            this.tpMessage.SuspendLayout();
+            this.tpEmulation.SuspendLayout();
+            this.tpDataValue.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbxTopic
             // 
-            this.tbxTopic.Location = new System.Drawing.Point(6, 6);
+            this.tbxTopic.Location = new System.Drawing.Point(12, 106);
             this.tbxTopic.Name = "tbxTopic";
-            this.tbxTopic.Size = new System.Drawing.Size(315, 20);
+            this.tbxTopic.Size = new System.Drawing.Size(636, 20);
             this.tbxTopic.TabIndex = 0;
             this.tbxTopic.Text = "topic";
             // 
             // tbxMessage
             // 
-            this.tbxMessage.Location = new System.Drawing.Point(6, 58);
+            this.tbxMessage.Location = new System.Drawing.Point(6, 32);
             this.tbxMessage.Name = "tbxMessage";
             this.tbxMessage.Size = new System.Drawing.Size(315, 20);
             this.tbxMessage.TabIndex = 1;
@@ -70,7 +75,7 @@
             // 
             // tbxLevel
             // 
-            this.tbxLevel.Location = new System.Drawing.Point(6, 32);
+            this.tbxLevel.Location = new System.Drawing.Point(6, 6);
             this.tbxLevel.Name = "tbxLevel";
             this.tbxLevel.Size = new System.Drawing.Size(315, 20);
             this.tbxLevel.TabIndex = 2;
@@ -78,7 +83,7 @@
             // 
             // bntPublish
             // 
-            this.bntPublish.Location = new System.Drawing.Point(178, 84);
+            this.bntPublish.Location = new System.Drawing.Point(15, 394);
             this.bntPublish.Name = "bntPublish";
             this.bntPublish.Size = new System.Drawing.Size(143, 23);
             this.bntPublish.TabIndex = 3;
@@ -94,14 +99,6 @@
             this.lblStatus.Size = new System.Drawing.Size(37, 13);
             this.lblStatus.TabIndex = 4;
             this.lblStatus.Text = "Status";
-            // 
-            // tbxHostName
-            // 
-            this.tbxHostName.Location = new System.Drawing.Point(12, 13);
-            this.tbxHostName.Name = "tbxHostName";
-            this.tbxHostName.Size = new System.Drawing.Size(315, 20);
-            this.tbxHostName.TabIndex = 5;
-            this.tbxHostName.Text = "http://sesden833:8123/signalr/";
             // 
             // tbxHub
             // 
@@ -148,47 +145,55 @@
             this.btnStartEmulation.UseVisualStyleBackColor = true;
             this.btnStartEmulation.Click += new System.EventHandler(this.btnStartEmulation_Click);
             // 
-            // Single
+            // tcMessages
             // 
-            this.Single.Controls.Add(this.tabPage1);
-            this.Single.Controls.Add(this.tabPage2);
-            this.Single.Location = new System.Drawing.Point(12, 102);
-            this.Single.Name = "Single";
-            this.Single.SelectedIndex = 0;
-            this.Single.Size = new System.Drawing.Size(665, 229);
-            this.Single.TabIndex = 12;
+            this.tcMessages.Controls.Add(this.tpMessage);
+            this.tcMessages.Controls.Add(this.tpDataValue);
+            this.tcMessages.Controls.Add(this.tpEmulation);
+            this.tcMessages.Location = new System.Drawing.Point(12, 150);
+            this.tcMessages.Name = "tcMessages";
+            this.tcMessages.SelectedIndex = 0;
+            this.tcMessages.Size = new System.Drawing.Size(665, 229);
+            this.tcMessages.TabIndex = 12;
             // 
-            // tabPage1
+            // tpMessage
             // 
-            this.tabPage1.Controls.Add(this.tbxTopic);
-            this.tabPage1.Controls.Add(this.tbxMessage);
-            this.tabPage1.Controls.Add(this.bntPublish);
-            this.tabPage1.Controls.Add(this.tbxLevel);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(657, 203);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Single";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tpMessage.Controls.Add(this.tbxMessage);
+            this.tpMessage.Controls.Add(this.tbxLevel);
+            this.tpMessage.Location = new System.Drawing.Point(4, 22);
+            this.tpMessage.Name = "tpMessage";
+            this.tpMessage.Padding = new System.Windows.Forms.Padding(3);
+            this.tpMessage.Size = new System.Drawing.Size(657, 203);
+            this.tpMessage.TabIndex = 0;
+            this.tpMessage.Text = "Message";
+            this.tpMessage.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // tpEmulation
             // 
-            this.tabPage2.Controls.Add(this.lblEmulationStats);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.tbxTopicEmulation);
-            this.tabPage2.Controls.Add(this.tbxMessageEmulation);
-            this.tabPage2.Controls.Add(this.tbxLevelEmulation);
-            this.tabPage2.Controls.Add(this.tbxSendCount);
-            this.tabPage2.Controls.Add(this.btnStartEmulation);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(657, 203);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Load emulation";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tpEmulation.Controls.Add(this.lblEmulationStats);
+            this.tpEmulation.Controls.Add(this.label2);
+            this.tpEmulation.Controls.Add(this.tbxTopicEmulation);
+            this.tpEmulation.Controls.Add(this.tbxMessageEmulation);
+            this.tpEmulation.Controls.Add(this.tbxLevelEmulation);
+            this.tpEmulation.Controls.Add(this.tbxSendCount);
+            this.tpEmulation.Controls.Add(this.btnStartEmulation);
+            this.tpEmulation.Controls.Add(this.label1);
+            this.tpEmulation.Location = new System.Drawing.Point(4, 22);
+            this.tpEmulation.Name = "tpEmulation";
+            this.tpEmulation.Padding = new System.Windows.Forms.Padding(3);
+            this.tpEmulation.Size = new System.Drawing.Size(657, 203);
+            this.tpEmulation.TabIndex = 2;
+            this.tpEmulation.Text = "Load emulation";
+            this.tpEmulation.UseVisualStyleBackColor = true;
+            // 
+            // lblEmulationStats
+            // 
+            this.lblEmulationStats.AutoSize = true;
+            this.lblEmulationStats.Location = new System.Drawing.Point(416, 28);
+            this.lblEmulationStats.Name = "lblEmulationStats";
+            this.lblEmulationStats.Size = new System.Drawing.Size(34, 13);
+            this.lblEmulationStats.TabIndex = 16;
+            this.lblEmulationStats.Text = "Stats:";
             // 
             // label2
             // 
@@ -223,32 +228,81 @@
             this.tbxLevelEmulation.TabIndex = 14;
             this.tbxLevelEmulation.Text = "level";
             // 
-            // lblEmulationStats
+            // tpDataValue
             // 
-            this.lblEmulationStats.AutoSize = true;
-            this.lblEmulationStats.Location = new System.Drawing.Point(416, 28);
-            this.lblEmulationStats.Name = "lblEmulationStats";
-            this.lblEmulationStats.Size = new System.Drawing.Size(34, 13);
-            this.lblEmulationStats.TabIndex = 16;
-            this.lblEmulationStats.Text = "Stats:";
+            this.tpDataValue.Controls.Add(this.btnDvNow);
+            this.tpDataValue.Controls.Add(this.tbxDvTimestamp);
+            this.tpDataValue.Controls.Add(this.tbxDvValue);
+            this.tpDataValue.Location = new System.Drawing.Point(4, 22);
+            this.tpDataValue.Name = "tpDataValue";
+            this.tpDataValue.Padding = new System.Windows.Forms.Padding(3);
+            this.tpDataValue.Size = new System.Drawing.Size(657, 203);
+            this.tpDataValue.TabIndex = 1;
+            this.tpDataValue.Text = "DataValue";
+            this.tpDataValue.UseVisualStyleBackColor = true;
+            // 
+            // tbxDvValue
+            // 
+            this.tbxDvValue.Location = new System.Drawing.Point(6, 6);
+            this.tbxDvValue.Name = "tbxDvValue";
+            this.tbxDvValue.Size = new System.Drawing.Size(191, 20);
+            this.tbxDvValue.TabIndex = 0;
+            this.tbxDvValue.Text = "1,0";
+            // 
+            // tbxDvTimestamp
+            // 
+            this.tbxDvTimestamp.Location = new System.Drawing.Point(6, 32);
+            this.tbxDvTimestamp.Name = "tbxDvTimestamp";
+            this.tbxDvTimestamp.Size = new System.Drawing.Size(191, 20);
+            this.tbxDvTimestamp.TabIndex = 1;
+            // 
+            // btnDvNow
+            // 
+            this.btnDvNow.Location = new System.Drawing.Point(204, 28);
+            this.btnDvNow.Name = "btnDvNow";
+            this.btnDvNow.Size = new System.Drawing.Size(41, 23);
+            this.btnDvNow.TabIndex = 2;
+            this.btnDvNow.Text = "now";
+            this.btnDvNow.UseVisualStyleBackColor = true;
+            this.btnDvNow.Click += new System.EventHandler(this.btnDvNow_Click);
+            // 
+            // cbHost
+            // 
+            this.cbHost.AutoCompleteCustomSource.AddRange(new string[] {
+            "http://localhost:50107/",
+            "http://sesden833:8123/signalr/",
+            "http://sesden833:8122/signalr/"});
+            this.cbHost.FormattingEnabled = true;
+            this.cbHost.Items.AddRange(new object[] {
+            "http://localhost:50107/",
+            "http://sesden833:8122/signalr/",
+            "http://sesden833:8123/signalr/"});
+            this.cbHost.Location = new System.Drawing.Point(12, 13);
+            this.cbHost.Name = "cbHost";
+            this.cbHost.Size = new System.Drawing.Size(315, 21);
+            this.cbHost.TabIndex = 13;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(766, 462);
-            this.Controls.Add(this.Single);
+            this.Controls.Add(this.cbHost);
+            this.Controls.Add(this.tbxTopic);
+            this.Controls.Add(this.bntPublish);
+            this.Controls.Add(this.tcMessages);
             this.Controls.Add(this.btnStartPublisher);
             this.Controls.Add(this.tbxHub);
-            this.Controls.Add(this.tbxHostName);
             this.Controls.Add(this.lblStatus);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Single.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tcMessages.ResumeLayout(false);
+            this.tpMessage.ResumeLayout(false);
+            this.tpMessage.PerformLayout();
+            this.tpEmulation.ResumeLayout(false);
+            this.tpEmulation.PerformLayout();
+            this.tpDataValue.ResumeLayout(false);
+            this.tpDataValue.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -261,20 +315,24 @@
         private System.Windows.Forms.TextBox tbxLevel;
         private System.Windows.Forms.Button bntPublish;
         private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.TextBox tbxHostName;
         private System.Windows.Forms.TextBox tbxHub;
         private System.Windows.Forms.Button btnStartPublisher;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbxSendCount;
         private System.Windows.Forms.Button btnStartEmulation;
-        private System.Windows.Forms.TabControl Single;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabControl tcMessages;
+        private System.Windows.Forms.TabPage tpMessage;
+        private System.Windows.Forms.TabPage tpEmulation;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbxTopicEmulation;
         private System.Windows.Forms.TextBox tbxMessageEmulation;
         private System.Windows.Forms.TextBox tbxLevelEmulation;
         private System.Windows.Forms.Label lblEmulationStats;
+        private System.Windows.Forms.TabPage tpDataValue;
+        private System.Windows.Forms.Button btnDvNow;
+        private System.Windows.Forms.TextBox tbxDvTimestamp;
+        private System.Windows.Forms.TextBox tbxDvValue;
+        private System.Windows.Forms.ComboBox cbHost;
     }
 }
 

@@ -7,7 +7,7 @@ namespace MessageRoutingHub.Common
         public static string ToJson(T obj)
         {
             var jsonSerialiser = new JavaScriptSerializer();
-            var json = jsonSerialiser.Serialize(obj);
+            var json = jsonSerialiser.Serialize(obj);            
 
             return json;
         }

@@ -14,6 +14,9 @@ namespace MessageRoutingHub.Service
     
     public class MessageRoutingBus : Hub
     {
+        public MessageRoutingBus()
+        { }
+
         #region properties
 
         public static ObjectCache Cache = MemoryCache.Default;

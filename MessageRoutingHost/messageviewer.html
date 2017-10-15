@@ -40,6 +40,7 @@
 
             msghub.client.newMessage = function (json) {
                 var msg = jQuery.parseJSON(json);
+                var obj = jQuery.parseJSON(msg.JsonObject);
 
                 //could do ++ up to limit the always remove/add
                 var cnt = $('#msgList li').length;
@@ -54,7 +55,7 @@
                 var timeStamp = getFormatedTime();
 
                 //add new message post
-                $('#msgList').prepend('<li class=' + msg.Level + '>' + timeStamp + ' <div>' + msg.Text + '</div></li>');
+                $('#msgList').prepend('<li class=' + obj.Level + '>' + timeStamp + ' <div>' + obj.Text + '</div></li>');
             };
 
             msghub.client.resetView = function (viewType) {
