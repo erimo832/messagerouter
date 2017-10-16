@@ -139,7 +139,9 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\mqttws31.js" />
     <Content Include="Scripts\theme.js" />
+    <Content Include="Scripts\View\chartmanager.js" />
     <Content Include="Scripts\View\commoncharts.js" />
+    <Content Include="Scripts\View\datamanager.js" />
     <Content Include="View\Chart\barchart.html" />
     <Content Include="View\Chart\linechart.html" />
     <Content Include="View\Chart\scatterchart.html" />
