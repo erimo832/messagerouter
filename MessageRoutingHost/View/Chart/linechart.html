@@ -8,11 +8,7 @@
     <!--
         
         - Refactor code move common stuff into js
-        - add some parameter
-            * linear/series
-            * max number of records
-            * max time window
-            * part of topic as label?
+        - add some parameter         
         - Show area?
         -
 
@@ -35,6 +31,10 @@
     <script src="/Scripts/View/commoncharts.js"></script>
     <script src="/Scripts/View/datamanager.js"></script>
     <script src="/Scripts/View/chartmanager.js"></script>
+
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
 
     <script type="text/javascript">
     $(function () {
@@ -78,7 +78,32 @@
         Chart.defaults.global.legend.display = false;
         Chart.defaults.global.defaultFontStyle = "bold";
 
+        /* declaration of calback methods */
+        var messageReceived = function (message) {
+            console.log(message);
+        };
+        var communicationChanged = function (message) {
+            console.log(message);
+        };
+        var communicationError = function (message) {
+            console.log(message);
+        };
+
+
         $(document).ready(function () {
+            var connection = communicationFactory.init("signalr");
+
+            //Register for events
+            connection.broker.onMessage = messageReceived;
+            connection.broker.onStatusChange = communicationChanged;
+            connection.broker.onError = communicationError;
+
+            connection.broker.ping();
+
+            //start to listen for events
+            connection.broker.connect();
+
+
             //refactor to make server technology agnostic. It can either be signalr-hub or mqtt
             var msghub = startSignalrConnection(msg);
 
@@ -93,11 +118,11 @@
             chartManager.init("chart");
 
             //register for event
-            msghub.client.resetView = function (viewType) {
+            /*msghub.client.resetView = function (viewType) {
                 if (viewType == "all" || viewType == "chart") {
                     resetView();
                 }
-            };
+            };*/
 
             msghub.client.newMessage = function (json) {
                 var msg = jQuery.parseJSON(json);                
@@ -121,10 +146,7 @@
                             data: datapointManager.getValueArray(),
                         }]
                     },
-                    options: {
-                        title: {
-                            text: "Values"
-                        },
+                    options: {                        
                         scales: {
                             xAxes: [{
                                 type: "time",

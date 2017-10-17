@@ -1,4 +1,4 @@
-﻿var chartManager = (function ($) {
+﻿; var chartManager = (function ($) {
     var obj = {};
     var ctx = null;
     var myChart = null;

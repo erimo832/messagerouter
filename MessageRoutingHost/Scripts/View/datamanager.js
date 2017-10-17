@@ -10,8 +10,7 @@
 
     return parent;
 }(dataManager || {}, jQuery));*/
-
-var datapointManager = (function ($) { //moment
+; var datapointManager = (function ($) { //moment
     var obj = {};
     //private
     var dataset = [];

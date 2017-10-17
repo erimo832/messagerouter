@@ -29,6 +29,10 @@ ul li {
     padding-right: 0.5em;
 }
 
+.error {
+    color: #02FF04;
+}
+
 .chart-color {
     color: rgba(2,255,4,0.8);
 }
