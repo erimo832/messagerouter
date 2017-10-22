@@ -1,16 +1,4 @@
-﻿/*var dataManager = (function (parent, $) {
-    var my = parent.ajax = parent.ajax || {};
-
-    my.get = function (url, params, callback) {
-        // ok, so I'm cheating a bit :)
-        return $.getJSON(url, params, callback);
-    };
-
-    // etc...   
-
-    return parent;
-}(dataManager || {}, jQuery));*/
-; var datapointManager = (function ($) { //moment
+﻿; var datapointManager = (function ($) { //moment
     var obj = {};
     //private
     var dataset = [];
@@ -42,8 +30,9 @@
         dataset.push(dataPoint);
         clearOldData();
     };
-    obj.getTimestampArray = function () { return dataset.map(function (item) { return new Date(item.Timestamp); }) };
-    obj.getValueArray = function () { return dataset.map(function (item) { return item.Value; }) };
+
+    obj.getTimestampArray = function () { return dataset.map(item => { return new Date(item.Timestamp); }) }; //item => (ECMA script 6), function (item) (ECMA script 5)
+    obj.getValueArray = function () { return dataset.map(item => { return item.Value; }) };       
 
     return obj;
 }(jQuery));

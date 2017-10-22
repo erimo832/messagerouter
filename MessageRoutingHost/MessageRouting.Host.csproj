@@ -110,6 +110,7 @@
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\Communication\communicationfactory.js" />
+    <Content Include="Scripts\Communication\enums.js" />
     <Content Include="Scripts\Communication\mqttConnection.js" />
     <Content Include="Scripts\Communication\signalRConnection.js" />
     <Content Include="Scripts\jquery-2.2.1.js" />

@@ -3,11 +3,11 @@
     var hub;
     var topic = ['#'];
     var name = "NoDefinedName";
+    
     //private        
     function registerEvents() {
-
-        hub.client.connectionEstablished = function (message) {            
-            if (typeof obj.onStatusChange === "function") {
+        hub.client.connectionEstablished = function (message) {                
+            if (typeof obj.onStatusChange === "function") {               
                 obj.onStatusChange(obj.ConnectionEnum.Connected, message);
             }
         };
@@ -68,7 +68,7 @@
             name = connectionName;
         
         if (subscriptionTopics) {
-            topic = subscriptionTopic.split(",");;
+            topic = subscriptionTopics.split(",");;
         }
         
         registerEvents(hub);

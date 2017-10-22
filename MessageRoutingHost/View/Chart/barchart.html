@@ -1,10 +1,179 @@
 ﻿<!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-	<meta charset="utf-8" />
-</head>
-<body>
+    <!-- theme reference -->
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
 
+    <!--
+
+        - Refactor code move common stuff into js
+        - add some parameter
+        - Show area?
+        -
+
+        - Possible to show area between values
+    -->
+
+
+    <script src="/Scripts/jquery-2.2.1.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="/signalr/hubs"></script>
+
+    <script src="/Scripts/moment.min.js"></script>
+    <script src="/Scripts/Chart.js"></script>
+
+
+    <script src="/Scripts/messagerouterconnection.js"></script>
+    <script src="/Scripts/common.js"></script>
+    <script src="/Scripts/theme.js"></script>
+    <script src="/Scripts/datetime.js"></script>
+    <script src="/Scripts/View/commoncharts.js"></script>
+    <script src="/Scripts/View/datamanager.js"></script>
+    <script src="/Scripts/View/chartmanager.js"></script>
+
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
+
+    <script type="text/javascript">
+    $(function () {
+        var msg =
+                    "<p>I need parameters to work! </p>" +
+                    "Valid parameters:<br />" +
+                    " - name <br />" +
+                    " - width (0-100 percentage value) <br />" +
+                    " - height (0-100 percentage value) <br />" +
+                    " - chartTimeUnit, chartXAxisLabel, chartYAxisLabel, chartXMaxTicksLimit, chartYMaxTicksLimit <br />" +
+                    " - dataMaxNumberOfDataPoints,  <br />" +
+                    " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
+                    " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
+                    " - size (base font-size) <br />" +
+                    "<p>Example: <br />" +
+                    "barchart.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
+
+        var params = function () {
+            var obj =
+            {
+                dataSettings: {
+                    dataMaxNumberOfDataPoints: getQueryParam("dataMaxNumberOfDataPoints", 100), //chart data
+                    dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000), //chart data
+                },
+                size: {
+                    width: getQueryParam("width"), //chart
+                    height: getQueryParam("height") //chart
+                },
+                communication: {
+                    topic: getQueryParam("topic"), //connection
+                    name: getQueryParam("name"), //connection
+                    protocol: getQueryParam("protocol", "signalr")
+                },
+                chart: {
+                    xLabelFormat: getQueryParam("xLabelFormat", 'HH:mm:ss'), //chart
+                },
+                fontSize: getQueryParam("size", 16), //chart, label
+                chartTimeUnit: getQueryParam("chartTimeUnit", "minute"), //chart
+                chartXAxisLabel: getQueryParam("chartXAxisLabel", ""), //chart
+                chartYAxisLabel: getQueryParam("chartYAxisLabel", ""), //chart
+                chartXMaxTicksLimit: getQueryParam("chartXMaxTicksLimit", 10), //chart
+                chartYMaxTicksLimit: getQueryParam("chartYMaxTicksLimit", 10), //chart
+                maintainAspectRatio: (getQueryParam("width", null) == null && getQueryParam("height", null) == null) ? true : false,
+                theme: getQueryParam("theme") //layout
+            };
+
+            return obj;
+        }();
+
+        function getChartConfig()
+        {
+            var gridcolor = getStyleRuleValue('color', '.chart-grid-color');
+            var color = getStyleRuleValue('color', '.chart-color');
+            var fontFamily = getStyleRuleValue('font-family', '.chart-font-family');
+
+            var config = {
+                type: 'bar',
+                data: {
+                    labels: datapointManager.getTimestampArray().map(x => {  return moment(x).format(params.chart.xLabelFormat); }),
+                    datasets: [{
+                        backgroundColor: color,
+                        borderColor: color,
+                        fill: false,
+                        data: datapointManager.getValueArray(),
+                    }]
+                },
+                options: {
+                    //responsive: true,
+                    maintainAspectRatio: params.maintainAspectRatio, //false
+                    scales: {
+                        xAxes: [{
+                            //type: "time",
+                            //distribution: "series", //seems to be a bug with "series" so no config param for that one for now
+                            gridLines: {
+                                color: gridcolor
+                            },
+                            ticks: {
+                                fontSize: params.fontSize,
+                                fontColor: color,
+                                fontFamily: fontFamily,
+                                autoSkip: true,
+                                maxTicksLimit: params.chartXMaxTicksLimit
+                            },
+                            time: {
+                                //format: "HH:mm",
+                                unit: params.chartTimeUnit,
+                                tooltipFormat: 'HH:mm:ss.SS',
+                                displayFormats: {
+                                    'minute': 'HH:mm',
+                                    'hour': 'HH:mm'
+                                },
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: params.chartXAxisLabel
+                            }
+                        }, ],
+                        yAxes: [{
+                            gridLines: {
+                                color: gridcolor
+                            },
+                            ticks: {
+                                fontSize: params.fontSize,
+                                fontColor: color,
+                                fontFamily: fontFamily,
+                                maxTicksLimit: params.chartYMaxTicksLimit,
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: params.chartYAxisLabel
+                            }
+                        }]
+                    },
+                }
+            };
+
+            return config;
+        }
+
+        $(document).ready(function () {
+            var connection = communicationFactory.init(params.communication.protocol);
+            chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
+        });
+    });
+
+    </script>
+
+</head>
+<body id="body" style="margin: 0;">
+    <div id="serverStatus" class="error">
+    </div>
+
+    <div id="message">
+    </div>
+
+    <div id="chart-container" style="position: relative;">
+        <!--  height:100vh; width:100vw -->
+        <canvas id="chart"></canvas> <!-- width="800" height="400" -->
+    </div>
 </body>
 </html>

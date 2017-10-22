@@ -4,15 +4,46 @@ Chart.defaults.global.defaultFontStyle = "bold";
 
 ; var chartManager = (function ($) {
     var obj = {};
-    var ctx = null;
-    var myChart = null;
     //private
+    var ctx = null;
+    var srvStatus = null;
+    var myChart = null;    
+    var getConfig = null;
 
-    //public
-    obj.init = function (elementName) {
-        ctx = $("#" + elementName);
+    var dataMgr = null;
+    var connectionMgr = null;
+    
+
+    /* Callbacks */
+    var messageReceived = function (message) {
+        var msg = jQuery.parseJSON(message);
+        var dataPoint = jQuery.parseJSON(msg.JsonObject);
+
+        dataMgr.add(dataPoint);
+
+        draw(getConfig());
     };
-    obj.draw = function (config) {
+    var communicationChanged = function (status, message) {
+        if (status === connectionMgr.ConnectionEnum.Connected) {
+            srvStatus.text(status + ": " + message);
+            srvStatus.show();
+
+            //Show for only 10sec
+            setTimeout(function () {
+                srvStatus.hide();
+            }, 10000);
+        }
+        else {
+            srvStatus.text(status + ": " + message);
+            srvStatus.show();
+        }
+        console.log(message);
+    };
+    var communicationError = function (message) {
+        console.log(message);
+    };
+    
+    var draw = function (config) {        
         if (ctx != null) {
             //reset chart
             if (myChart != null) {
@@ -22,6 +53,35 @@ Chart.defaults.global.defaultFontStyle = "bold";
             myChart = new Chart(ctx, config);
         } else { console.log("chartManager must be initialized"); }
     };
+
+    //public
+    obj.init = function (chartElementName, chartContainerElementName, statusElementName, dataManager, connectionManager, settings, getConfigFunction) {
+        ctx = $("#" + chartElementName);
+        srvStatus = $("#" + statusElementName);
+        getConfig = getConfigFunction;
+
+        dataMgr = dataManager;
+        connectionMgr = connectionManager;
+
+        //Set size of chart
+        if (settings.size.width != null && settings.size.height != null) {
+            $("#" + chartContainerElementName).css("width", settings.size.width + "vw");
+            $("#" + chartContainerElementName).css("height", settings.size.height + "vh");
+        }
+
+
+        //Register for events
+        connectionManager.broker.onMessage = messageReceived;
+        connectionManager.broker.onStatusChange = communicationChanged;
+        connectionManager.broker.onError = communicationError;
+
+        //init data manager
+        dataManager.init(settings.dataSettings.dataMaxNumberOfDataPoints, settings.dataSettings.dataSaveWindowSeconds);
+
+        //start connection
+        connectionManager.broker.connect(settings.communication.name, settings.communication.topic);
+    };
+    
 
     return obj;
 }(jQuery));

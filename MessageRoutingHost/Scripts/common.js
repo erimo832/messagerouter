@@ -29,7 +29,7 @@ function getQueryParam(paramName, defaultValue) {
     if (typeof defaultValue != 'undefined')
         return defaultValue;
 
-    return null;
+    return undefined;
 };
 
 //Gets value from a css class and property
