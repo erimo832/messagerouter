@@ -8,7 +8,7 @@ var mqttConnection = (function ($) {
     obj.onMessage;
     obj.onStatusChange;
     obj.onError;
-    //obj.connect = function (newMessageCallback, statusChangeCallback, errorCallback) {
+    obj.ConnectionEnum;    
     obj.connect = function () {
     };
     obj.ping = function () {

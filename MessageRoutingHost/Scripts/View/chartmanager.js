@@ -1,4 +1,8 @@
-﻿; var chartManager = (function ($) {
+﻿//chart defaults
+Chart.defaults.global.legend.display = false;
+Chart.defaults.global.defaultFontStyle = "bold";
+
+; var chartManager = (function ($) {
     var obj = {};
     var ctx = null;
     var myChart = null;

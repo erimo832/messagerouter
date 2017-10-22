@@ -12,7 +12,7 @@ function getQueryParam(paramName, defaultValue) {
         query = query.split("%20").join(" ");
         query = query.split("%23").join("#");
         query = query.split("%27").join("'");
-        
+
 
         var params = query.split("&");
 
@@ -30,7 +30,7 @@ function getQueryParam(paramName, defaultValue) {
         return defaultValue;
 
     return null;
-}
+};
 
 //Gets value from a css class and property
 //ex: var color = getStyleRuleValue('color', '.chart-color');
@@ -46,3 +46,13 @@ function getStyleRuleValue(style, selector) {
 
     }
 };
+
+function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+      s4() + '-' + s4() + s4() + s4();
+}

@@ -1,128 +1,78 @@
-﻿/*var signalrConnection = (function ($) {
+﻿var signalrConnection = (function ($) {
     var obj = {};
-    //private
+    var hub;
+    var topic = ['#'];
+    var name = "NoDefinedName";
+    //private        
+    function registerEvents() {
 
-    //public
-    obj.init = function (protocol, newMessageCallback, statusChangeCallback, errorCallback) {
+        hub.client.connectionEstablished = function (message) {            
+            if (typeof obj.onStatusChange === "function") {
+                obj.onStatusChange(obj.ConnectionEnum.Connected, message);
+            }
+        };
+        hub.client.newMessage = function (msg) {
+            if (typeof obj.onMessage === "function") {
+                obj.onMessage(msg);
+            }
+        };
+        $.connection.hub.disconnected(function () {
+            if (typeof obj.onError === "function") {
+                obj.onError($.connection.hub.lastError.message);
+            }
 
-    };
-    obj.connect = function () {
+            if (typeof obj.onStatusChange === "function") {
+                obj.onStatusChange(obj.ConnectionEnum.Disconnected, "Disconnected from signalr server");
+            }
 
+            //reconnect
+            setTimeout(function () {
+                $.connection.hub.start().done(function () {
+                    startSubscription(hub);
+                });
+            }, 5000); // Restart connection after 5 seconds.
 
-        //Do I need this?
-        //return "the connection";
-    };
+        });
+        $.connection.hub.reconnecting(function () {
+            if (typeof obj.onStatusChange === "function") {
+                obj.onStatusChange(obj.ConnectionEnum.Reconnecting, "Reconnecting to signalr server");
+            }
+        });
+        $.connection.hub.reconnected(function () {
+            if (typeof obj.onStatusChange === "function") {
+                obj.onStatusChange(obj.ConnectionEnum.Connected, "Reconnected to signalr server");
+            }
 
-    return obj;
-}(jQuery));*/
+            startSubscription(hub);
+        });        
+        // Start the connection.
+        $.connection.hub.start().done(function () {            
+            startSubscription(hub);
+        });
+    }
 
-/* to be implemented */
-
-var signalrConnection = (function ($) {
-    var obj = {};
-    //private
+    function startSubscription(srv) {        
+        //connect to server
+        srv.server.subscribe(name, topic);
+    }
 
     //public
     obj.onMessage;
     obj.onStatusChange;
     obj.onError;
-    //obj.connect = function (newMessageCallback, statusChangeCallback, errorCallback) {
-    obj.connect = function () {        
-    };
-    obj.ping = function () {
-        if (typeof obj.onStatusChange === "function") {
-            obj.onStatusChange("pong");
-        }
-    }
+    obj.ConnectionEnum;
+    obj.connect = function (connectionName, subscriptionTopics) {
+        hub = $.connection.messageRoutingBus;
 
+        if(connectionName)
+            name = connectionName;
+        
+        if (subscriptionTopics) {
+            topic = subscriptionTopic.split(",");;
+        }
+        
+        registerEvents(hub);
+    };
 
     return obj;
 }(jQuery));
-
-
-
-var infoMsg;
-var topic = ['#'];
-
-function startSignalrConnection(msg) {
-    var msghub = $.connection.messageRoutingBus;
-    infoMsg = msg;
-
-    $('#serverStatus').hide();
-
-    registerForEvents(msghub);
-
-    return msghub;
-}
-
-
-function registerToServer(msghub) {
-    var name = getQueryParam("name");
-    var topics = getQueryParam("topic");
-
-    if (topics != null) {
-        topic = topics.split(",");
-    }
-
-    if (name == null) {
-        $('#message').html(infoMsg);
-        return;
-    }
-
-    msghub.server.subscribe(name, topic);
-}
-
-/*******************************************
-* register server events
-*******************************************/
-function registerForEvents(msghub) {
-
-    msghub.client.connectionEstablished = function (message) {
-        var encodedMsg = $('<div />').text(message).html();
-
-        $('#serverStatus').text(encodedMsg);
-        $('#serverStatus').show();
-
-        //Show for only 10sec
-        setTimeout(function () {
-            $('#serverStatus').hide();
-        }, 10000);
-    };
-
-    // Start the connection.
-    $.connection.hub.start().done(function () {
-        registerToServer(msghub);
-    });
-
-
-    $.connection.hub.disconnected(function () {
-        $('#serverStatus').text("disconnected from server, lasterror: " + $.connection.hub.lastError.message);
-        $('#serverStatus').show();
-
-        //reconnect
-        setTimeout(function () {
-            $.connection.hub.start().done(function () {
-                registerToServer(msghub);
-                $('#serverStatus').hide();
-            });
-        }, 5000); // Restart connection after 5 seconds.
-
-    });
-
-    $.connection.hub.reconnecting(function () {
-        $('#serverStatus').text("reconnecting to server");
-        $('#serverStatus').show();
-    });
-
-    $.connection.hub.reconnected(function () {
-        $('#serverStatus').text("reconnected to server");
-        $('#serverStatus').show();
-        registerToServer(msghub);
-
-        //Show for only 10sec
-        setTimeout(function () {
-            $('#serverStatus').hide();
-
-        }, 10000);
-    });
-}

@@ -51,7 +51,6 @@
                     " - size (base font-size) <br />" +                    
                     "<p>Example: <br />" +
                     "linechart.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
-
         
         var params = function () {
             var obj =
@@ -72,23 +71,107 @@
             };
              
             return obj;
-        }();
-
-        //chart defaults
-        Chart.defaults.global.legend.display = false;
-        Chart.defaults.global.defaultFontStyle = "bold";
+        }();               
 
         /* declaration of calback methods */
         var messageReceived = function (message) {
+            var msg = jQuery.parseJSON(message);
+            var dataPoint = jQuery.parseJSON(msg.JsonObject);
+
+            datapointManager.add(dataPoint);                      
+
+            chartManager.draw(getChartConfig());
+        };
+        var communicationChanged = function (status, message) {
+            if (status === communicationFactory.ConnectionEnum.Connected) {
+                $('#serverStatus').text(status + ": " + message);
+                $('#serverStatus').show();
+
+                //Show for only 10sec
+                setTimeout(function () {
+                    $('#serverStatus').hide();
+                }, 10000);
+            }
+            else {
+                $('#serverStatus').text(status + ": " + message);
+                $('#serverStatus').show();
+            }
             console.log(message);
         };
-        var communicationChanged = function (message) {
-            console.log(message);
-        };
-        var communicationError = function (message) {
+        var communicationError = function (status, message) {
             console.log(message);
         };
 
+
+        function getChartConfig()
+        {
+            var gridcolor = getStyleRuleValue('color', '.chart-grid-color');
+            var color = getStyleRuleValue('color', '.chart-color');
+            var fontFamily = getStyleRuleValue('font-family', '.chart-font-family');
+
+            var config = {
+                type: 'line',
+                data: {
+                    labels: datapointManager.getTimestampArray(),
+                    datasets: [{
+                        //label: "Set1",
+                        backgroundColor: color,
+                        borderColor: color,
+                        fill: false,
+                        data: datapointManager.getValueArray(),
+                    }]
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            type: "time",
+                            distribution: "linear", //seems to be a bug with "series" so no config param for that one for now
+                            gridLines: {
+                                color: gridcolor
+                            },
+                            ticks: {
+                                fontSize: params.fontSize,
+                                fontColor: color,
+                                fontFamily: fontFamily,
+                                autoSkip: true,
+                                maxTicksLimit: params.chartXMaxTicksLimit
+                            },
+                            time: {
+                                //format: "HH:mm",
+                                unit: params.chartTimeUnit,
+                                tooltipFormat: 'HH:mm:ss.SS',
+                                displayFormats: {
+                                    'minute': 'HH:mm',
+                                    'hour': 'HH:mm'
+                                },
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: params.chartXAxisLabel
+                            }
+                        }, ],
+                        yAxes: [{
+                            gridLines: {
+                                color: gridcolor
+                            },
+                            ticks: {
+                                fontSize: params.fontSize,
+                                fontColor: color,
+                                fontFamily: fontFamily,
+                                maxTicksLimit: params.chartYMaxTicksLimit,
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: params.chartYAxisLabel
+                            }
+                        }]
+                    },
+                }
+            };
+
+            return config;
+        }
 
         $(document).ready(function () {
             var connection = communicationFactory.init("signalr");
@@ -97,16 +180,8 @@
             connection.broker.onMessage = messageReceived;
             connection.broker.onStatusChange = communicationChanged;
             connection.broker.onError = communicationError;
-
-            connection.broker.ping();
-
-            //start to listen for events
-            connection.broker.connect();
-
-
-            //refactor to make server technology agnostic. It can either be signalr-hub or mqtt
-            var msghub = startSignalrConnection(msg);
-
+                      
+            
             //Set size of chart
             $("#chart").attr("width", params.width);
             $("#chart").attr("height", params.height);
@@ -117,86 +192,8 @@
             //init chartManager
             chartManager.init("chart");
 
-            //register for event
-            /*msghub.client.resetView = function (viewType) {
-                if (viewType == "all" || viewType == "chart") {
-                    resetView();
-                }
-            };*/
-
-            msghub.client.newMessage = function (json) {
-                var msg = jQuery.parseJSON(json);                
-                var dataPoint = jQuery.parseJSON(msg.JsonObject);
-                                
-                datapointManager.add(dataPoint);
-                
-                var gridcolor = getStyleRuleValue('color', '.chart-grid-color');
-                var color = getStyleRuleValue('color', '.chart-color');
-                var fontFamily = getStyleRuleValue('font-family', '.chart-font-family');
-                
-                var config = {
-                    type: 'line',
-                    data: {
-                        labels: datapointManager.getTimestampArray(),
-                        datasets: [{
-                            //label: "Set1",
-                            backgroundColor: color,
-                            borderColor: color,
-                            fill: false,
-                            data: datapointManager.getValueArray(),
-                        }]
-                    },
-                    options: {                        
-                        scales: {
-                            xAxes: [{
-                                type: "time",
-                                distribution: "linear", //seems to be a bug with "series" so no config param for that one for now
-                                gridLines: {
-                                    color: gridcolor
-                                },
-                                ticks: {
-                                    fontSize: params.fontSize,
-                                    fontColor: color,
-                                    fontFamily: fontFamily,
-                                    autoSkip: true,
-                                    maxTicksLimit: params.chartXMaxTicksLimit
-                                },
-                                time: {
-                                    //format: "HH:mm",
-                                    unit: params.chartTimeUnit,                                    
-                                    tooltipFormat: 'HH:mm:ss.SS',
-                                    displayFormats: {
-                                        'minute': 'HH:mm',
-                                        'hour': 'HH:mm'
-                                    },
-                                },
-                                scaleLabel: {
-                                    display: true,                                    
-                                    labelString: params.chartXAxisLabel
-                                }
-                            }, ],
-                            yAxes: [{
-                                gridLines: {
-                                    color: gridcolor
-                                },
-                                ticks: {
-                                    fontSize: params.fontSize,
-                                    fontColor: color,
-                                    fontFamily: fontFamily,
-                                    maxTicksLimit: params.chartYMaxTicksLimit,
-                                    beginAtZero: true
-                                },
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: params.chartYAxisLabel
-                                }
-                            }]
-                        },
-                    }
-                };
-            
-                chartManager.draw(config);
-            };
+            //start to listen for events
+            connection.broker.connect();
         });
     });
 
