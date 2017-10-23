@@ -41,7 +41,7 @@
         var msg =
                     "<p>I need parameters to work! </p>" +
                     "Valid parameters:<br />" +
-                    " - name <br />" +
+                    " - name (required)<br />" +
                     " - width (0-100 percentage value) <br />" +
                     " - height (0-100 percentage value) <br />" +
                     " - chartTimeUnit, chartXAxisLabel, chartYAxisLabel, chartXMaxTicksLimit, chartYMaxTicksLimit <br />" +
@@ -153,8 +153,14 @@
         }
 
         $(document).ready(function () {
-            var connection = communicationFactory.init(params.communication.protocol);
-            chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
+            //add step config
+
+            if (!params.communication.name) {
+                $("#message").html(msg);
+            } else {
+                var connection = communicationFactory.init(params.communication.protocol);
+                chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
+            }
         });
     });
 
