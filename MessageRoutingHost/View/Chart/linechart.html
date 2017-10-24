@@ -44,8 +44,16 @@
                     " - name (required)<br />" +
                     " - width (0-100 percentage value) <br />" +
                     " - height (0-100 percentage value) <br />" +
-                    " - chartTimeUnit, chartXAxisLabel, chartYAxisLabel, chartXMaxTicksLimit, chartYMaxTicksLimit <br />" +
-                    " - dataMaxNumberOfDataPoints,  <br />" +
+                    " - Chart settings: <br />" +
+                    " &nbsp;&nbsp;- timeUnit (default: minutes) <br />" +
+                    " &nbsp;&nbsp;- xAxisLabel <br />" +
+                    " &nbsp;&nbsp;- yAxisLabel <br />" +
+                    " &nbsp;&nbsp;- xMaxTicksLimit (default: 10) <br />" +
+                    " &nbsp;&nbsp;- yMaxTicksLimit (default: 10) <br />" +
+                    " &nbsp;&nbsp;- steppedLine (default: false, valid values: false, true) <br />" +
+                    " &nbsp;&nbsp;- fill (default: false, valid values: false, true) <br />" +
+                    " &nbsp;&nbsp;- dataMaxNumberOfDataPoints (default: 100)  <br />" +
+                    " &nbsp;&nbsp;- dataSaveWindowSeconds  (default: 36000 seconds) <br />" +
                     " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
                     " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
                     " - size (base font-size) <br />" +                    
@@ -57,7 +65,7 @@
             {
                 dataSettings: {
                     dataMaxNumberOfDataPoints: getQueryParam("dataMaxNumberOfDataPoints", 100), //chart data
-                    dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000), //chart data
+                    dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000) //chart data
                 },
                 size: {
                     width: getQueryParam("width"), //chart
@@ -68,13 +76,17 @@
                     name: getQueryParam("name"), //connection
                     protocol: getQueryParam("protocol", "signalr")
                 },
-                fontSize: getQueryParam("size", 16), //chart, label                
-                chartTimeUnit: getQueryParam("chartTimeUnit", "minute"), //chart
-                chartXAxisLabel: getQueryParam("chartXAxisLabel", ""), //chart
-                chartYAxisLabel: getQueryParam("chartYAxisLabel", ""), //chart
-                chartXMaxTicksLimit: getQueryParam("chartXMaxTicksLimit", 10), //chart
-                chartYMaxTicksLimit: getQueryParam("chartYMaxTicksLimit", 10), //chart                
-                maintainAspectRatio: (getQueryParam("width", null) == null && getQueryParam("height", null) == null) ? true : false,                
+                chart: {
+                    steppedLine: getQueryParam("steppedLine", false) != false ? true : false, //some bug in chartjs should support before and after getQueryParam("steppedLine", false)  (test in newer versions of chartjs)
+                    fill: getQueryParam("fill", false) != false ? true : false,
+                    timeUnit: getQueryParam("timeUnit", "minute"), //chart
+                    xAxisLabel: getQueryParam("xAxisLabel", ""), //chart
+                    yAxisLabel: getQueryParam("yAxisLabel", ""), //chart
+                    xMaxTicksLimit: getQueryParam("xMaxTicksLimit", 10), //chart
+                    yMaxTicksLimit: getQueryParam("yMaxTicksLimit", 10), //chart                
+                    maintainAspectRatio: (getQueryParam("width", null) == null && getQueryParam("height", null) == null) ? true : false,
+                },
+                fontSize: getQueryParam("size", 16), //chart, label
                 theme: getQueryParam("theme") //layout
             };
              
@@ -92,15 +104,17 @@
                 data: {
                     labels: datapointManager.getTimestampArray(),
                     datasets: [{
-                        backgroundColor: color,
-                        borderColor: color,
-                        fill: false,
                         data: datapointManager.getValueArray(),
+                        steppedLine: params.chart.steppedLine,
+                        fill: params.chart.fill,
+                        lineTension: 0,
+                        backgroundColor: color,
+                        borderColor: color,                        
                     }]
                 },
                 options: {
                     //responsive: true,
-                    maintainAspectRatio: params.maintainAspectRatio, //false
+                    maintainAspectRatio: params.chart.maintainAspectRatio, //false
                     scales: {
                         xAxes: [{
                             type: "time",
@@ -112,12 +126,12 @@
                                 fontSize: params.fontSize,
                                 fontColor: color,
                                 fontFamily: fontFamily,
-                                autoSkip: true,
-                                maxTicksLimit: params.chartXMaxTicksLimit
+                                autoSkip: false,
+                                maxTicksLimit: params.chart.xMaxTicksLimit
                             },
                             time: {
                                 //format: "HH:mm",
-                                unit: params.chartTimeUnit,
+                                unit: params.chart.timeUnit,
                                 tooltipFormat: 'HH:mm:ss.SS',
                                 displayFormats: {
                                     'minute': 'HH:mm',
@@ -126,7 +140,7 @@
                             },
                             scaleLabel: {
                                 display: true,
-                                labelString: params.chartXAxisLabel
+                                labelString: params.chart.xAxisLabel
                             }
                         }, ],
                         yAxes: [{
@@ -137,12 +151,13 @@
                                 fontSize: params.fontSize,
                                 fontColor: color,
                                 fontFamily: fontFamily,
-                                maxTicksLimit: params.chartYMaxTicksLimit,
-                                beginAtZero: true
+                                maxTicksLimit: params.chart.yMaxTicksLimit,
+                                beginAtZero: true,
+                                stepSize: 1
                             },
                             scaleLabel: {
                                 display: true,
-                                labelString: params.chartYAxisLabel
+                                labelString: params.chart.yAxisLabel
                             }
                         }]
                     },
@@ -152,8 +167,7 @@
             return config;
         }
 
-        $(document).ready(function () {
-            //add step config
+        $(document).ready(function () {            
             //Add a message log
             if (!params.communication.name) {
                 $("#message").html(msg);
