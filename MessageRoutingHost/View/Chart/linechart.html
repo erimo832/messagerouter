@@ -111,7 +111,7 @@
                         fill: params.chart.fill,
                         lineTension: 0,
                         backgroundColor: color,
-                        borderColor: color,                        
+                        borderColor: color                     
                     }]
                 },
                 options: {
@@ -128,7 +128,7 @@
                                 fontSize: params.fontSize,
                                 fontColor: color,
                                 fontFamily: fontFamily,
-                                autoSkip: false,
+                                autoSkip: true,
                                 maxTicksLimit: params.chart.xMaxTicksLimit
                             },
                             time: {
@@ -138,13 +138,13 @@
                                 displayFormats: {
                                     'minute': 'HH:mm',
                                     'hour': 'HH:mm'
-                                },
+                                }
                             },
                             scaleLabel: {
                                 display: true,
                                 labelString: params.chart.xAxisLabel
                             }
-                        }, ],
+                        }],
                         yAxes: [{
                             gridLines: {
                                 color: gridcolor
@@ -162,7 +162,7 @@
                                 labelString: params.chart.yAxisLabel
                             }
                         }]
-                    },
+                    }
                 }
             };
 
