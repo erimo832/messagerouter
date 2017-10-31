@@ -52,6 +52,7 @@
                     " &nbsp;&nbsp;- yMaxTicksLimit (default: 10) <br />" +
                     " &nbsp;&nbsp;- steppedLine (default: false, valid values: false, true) <br />" +
                     " &nbsp;&nbsp;- fill (default: false, valid values: false, true) <br />" +
+                    " &nbsp;&nbsp;- beginAtZero (default: false, valid values: false, true) <br />" +
                     " &nbsp;&nbsp;- dataMaxNumberOfDataPoints (default: 100)  <br />" +
                     " &nbsp;&nbsp;- dataSaveWindowSeconds  (default: 36000 seconds) <br />" +
                     " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
@@ -85,6 +86,7 @@
                     xMaxTicksLimit: getQueryParam("xMaxTicksLimit", 10), //chart
                     yMaxTicksLimit: getQueryParam("yMaxTicksLimit", 10), //chart                
                     maintainAspectRatio: (getQueryParam("width", null) == null && getQueryParam("height", null) == null) ? true : false,
+                    beginAtZero: getQueryParam("fill", false) != false ? true : false
                 },
                 fontSize: getQueryParam("size", 16), //chart, label
                 theme: getQueryParam("theme") //layout
@@ -152,7 +154,7 @@
                                 fontColor: color,
                                 fontFamily: fontFamily,
                                 maxTicksLimit: params.chart.yMaxTicksLimit,
-                                beginAtZero: true,
+                                beginAtZero: params.chart.beginAtZero,
                                 stepSize: 1
                             },
                             scaleLabel: {
