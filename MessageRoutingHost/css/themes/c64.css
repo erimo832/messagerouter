@@ -3,6 +3,7 @@
     background-color: #482AA0;
     font-family: 'C64 User';
     letter-spacing: 0px;
+    white-space: nowrap;
 
     /*font: normal 18pt/24px "C64 User", sans-serif !important;
 	letter-spacing: 0px;

@@ -1,6 +1,7 @@
 ﻿body {
     margin: 0;    
     background-color: #2E2E2E;
+    white-space: nowrap;
 }
 
 ul {

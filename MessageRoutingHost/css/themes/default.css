@@ -2,6 +2,7 @@
 {
     margin: 0;
     background-color: #0094ff;
+    white-space: nowrap;
 }
 
 ul {
