@@ -5,7 +5,6 @@ $('#body').keyup(function (event) {
     }
 });
 
-
 //Move to 
 function resetView() {
     //Clear dataset

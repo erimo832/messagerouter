@@ -13,7 +13,6 @@ Chart.defaults.global.defaultFontStyle = "bold";
     var dataMgr = null;
     var connectionMgr = null;
     
-
     /* Callbacks */
     var messageReceived = function (message) {
         var msg = jQuery.parseJSON(message);
@@ -69,7 +68,6 @@ Chart.defaults.global.defaultFontStyle = "bold";
             $("#" + chartContainerElementName).css("height", settings.size.height + "vh");
         }
 
-
         //Register for events
         connectionManager.broker.onMessage = messageReceived;
         connectionManager.broker.onStatusChange = communicationChanged;
@@ -81,7 +79,6 @@ Chart.defaults.global.defaultFontStyle = "bold";
         //start connection
         connectionManager.broker.connect(settings.communication.name, settings.communication.topic);
     };
-    
 
     return obj;
 }(jQuery));
