@@ -98,10 +98,32 @@
             
         };
 
+        var communicationChanged = function (status, message) {
+            if (status === connection.ConnectionEnum.Connected) {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+
+                //Show for only 10sec
+                setTimeout(function () {
+                    $("#serverStatus").hide();
+                }, 10000);
+            }
+            else {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+            }
+            console.log(message);
+        };
+        var communicationError = function (message) {
+            console.log(message);
+        };
+
         $(document).ready(function () {
             var connection = communicationFactory.init(params.communication.protocol);
             //chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
             connection.broker.onMessage = messageReceived;
+            connection.broker.onStatusChange = communicationChanged;
+            connection.broker.onError = communicationError;
 
             //start connection
             connection.broker.connect(params.communication.name, params.communication.topic);
@@ -128,8 +150,6 @@
                 return '<span class="' + cls + '">' + match + '</span>';
             });
         }
-
-
     });
 
     </script>

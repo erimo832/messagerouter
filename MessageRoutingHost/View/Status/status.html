@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <!-- theme reference -->
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
+    <link href="/css/StatusTypes.css" rel="stylesheet" />
+    <!--
+
+        - Refactor code move common stuff into js
+        - add some parameter
+        - Show area?
+        -
+
+        - Possible to show area between values
+    -->
+
+    <script src="/Scripts/jquery-2.2.1.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script src="/Scripts/moment.min.js"></script>
+
+    <script src="/Scripts/messagerouterconnection.js"></script>
+    <script src="/Scripts/common.js"></script>
+    <script src="/Scripts/theme.js"></script>
+    <script src="/Scripts/datetime.js"></script>
+    <script src="/Scripts/View/statusmanager.js"></script>
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
+    <script type="text/javascript">
+    $(function () {
+        var msg =
+                    "<p>I need parameters to work! </p>" +
+                    "Valid parameters:<br />" +
+                    " - name (required)<br />" +
+                    " - width (0-100 percentage value) <br />" +
+                    " - height (0-100 percentage value) <br />" +
+                    " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
+                    " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
+                    " - size (base font-size) <br />" +
+                    "<p>Example: <br />" +
+                    "status.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
+
+        var params = function () {
+            var obj =
+            {
+                size: {
+                    width: getQueryParam("width"), //chart
+                    height: getQueryParam("height") //chart
+                },
+                communication: {
+                    topic: getQueryParam("topic"), //connection
+                    name: getQueryParam("name"), //connection
+                    protocol: getQueryParam("protocol", "signalr")
+                },
+                fontSize: getQueryParam("size", 16), //chart, label
+                theme: getQueryParam("theme") //layout
+            };
+
+            return obj;
+        }();
+
+        //Ugly globals
+        var connection;
+
+        var draw = function (list) {
+            $('#container').empty();
+
+            for (var i = 0; i < list.length; i++) {
+                $('#container').append("<span class='" + list[i].Status + "'>" + list[i].Name + "</span> "); //must have a char after span for now so we break rows
+            }
+        };
+
+        /* Callbacks */
+        var messageReceived = function (message)
+        {
+            var msg = jQuery.parseJSON(message);
+            var obj = jQuery.parseJSON(msg.JsonObject);
+            statusManager.add(obj);
+
+            var list = statusManager.orderedList();
+
+            draw(list);
+        };
+        var communicationChanged = function (status, message)
+        {
+            if (status === connection.ConnectionEnum.Connected)
+            {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+
+                //Show for only 10sec
+                setTimeout(function ()
+                {
+                    $("#serverStatus").hide();
+                }, 10000);
+            }
+            else
+            {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+            }
+            console.log(message);
+        };
+        var communicationError = function (message)
+        {
+            console.log(message);
+        };
+
+       
+
+        $(document).ready(function () {
+            //Add a message log
+            if (!params.communication.name) {
+                $("#message").html(msg);
+            }
+            else
+            {
+                statusManager.init("Name");
+
+                connection = communicationFactory.init(params.communication.protocol);
+
+                //Register for events
+                connection.broker.onMessage = messageReceived;
+                connection.broker.onStatusChange = communicationChanged;
+                connection.broker.onError = communicationError;
+
+                connection.broker.connect(params.communication.name, params.communication.topic);
+            }
+        });
+    });
+
+    </script>
+</head>
+<body id="body" style="margin: 0;">
+    <div id="serverStatus" class="error">
+    </div>
+    <div id="message">
+    </div>
+    <div id="container"></div>
+</body>
+</html>

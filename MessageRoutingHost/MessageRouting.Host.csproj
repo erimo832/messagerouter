@@ -146,10 +146,12 @@
     <Content Include="Scripts\View\chartmanager.js" />
     <Content Include="Scripts\View\commoncharts.js" />
     <Content Include="Scripts\View\datamanager.js" />
+    <Content Include="Scripts\View\statusmanager.js" />
     <Content Include="View\Chart\barchart.html" />
     <Content Include="View\Chart\linechart.html" />
     <Content Include="View\Chart\scatterchart.html" />
     <Content Include="View\Log\messagelog.html" />
+    <Content Include="View\Status\status.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

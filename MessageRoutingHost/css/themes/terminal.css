@@ -50,3 +50,23 @@ ul li {
 	 font-family: "terminal";
 	 src: url("/css/themes/terminal/Glass_TTY_VT220.ttf") format("truetype");
 }
+
+/* format json */
+.string { color: olive; }
+.number { color: wheat; }
+.boolean { color: wheat; }
+.null { color: wheat; }
+.key { color: crimson; }
+
+/* statuses */
+.Online {
+    padding: 0.1em;
+    color: #02FF04;
+    background-color: #005500;
+}
+
+.Offline {
+    padding: 0.1em;
+    color: #02FF04;
+    background-color: #550000;
+}

@@ -66,3 +66,21 @@ ul li {
 	 src: url("/sites/style64.org/themes/hiroshige/fonts/C64_Pro_Mono_v1.0-STYLE.ttf") format("truetype"),
 	 			url("/sites/style64.org/themes/hiroshige/fonts/C64_Pro_Mono_v1.0-STYLE.woff") format("woff");
 }
+
+/* format json */
+.string { }
+.number {  }
+.boolean {  }
+.null {  }
+.key { }
+
+/* statuses */
+.Online {
+    padding: 0.1em;
+    background-color: #00AA00;
+}
+
+.Offline {
+    padding: 0.1em;
+    background-color: #AA0000;
+}

@@ -33,3 +33,21 @@ ul li {
 .chart-grid-color {
     color: rgba(244,255,211,0.2);
 }
+
+/* format json */
+.string { }
+.number {  }
+.boolean {  }
+.null {  }
+.key { }
+
+/* statuses */
+.Online {
+    padding: 0.1em;
+    background-color: #008800;
+}
+
+.Offline {
+    padding: 0.1em;
+    background-color: #880000;
+}

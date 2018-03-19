@@ -1,7 +1,7 @@
 ﻿body {
     margin: 0;
     background-color: #343434;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 
 ul {
@@ -33,8 +33,22 @@ ul li {
     color: rgba(221,221,221,0.2);
 }
 
+/* format json */
 .string { color: olive; }
 .number { color: wheat; }
 .boolean { color: wheat; }
 .null { color: wheat; }
 .key { color: brown; }
+
+/* statuses */
+.Online {
+    padding: 0.1em;
+    color: #AAAAAA;
+    background-color: olivedrab
+}
+
+.Offline {
+    padding: 0.1em;
+    color: #AAAAAA;
+    background-color: maroon
+}
