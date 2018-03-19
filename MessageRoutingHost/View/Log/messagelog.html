@@ -1,10 +1,151 @@
 ﻿<!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-	<meta charset="utf-8" />
-</head>
-<body>
+    <!-- theme reference -->
+    <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
 
+    <!--
+
+        - Refactor code move common stuff into js
+        - add some parameter
+        - Show area?
+        -
+
+        - Possible to show area between values
+    -->
+
+
+    <script src="/Scripts/jquery-2.2.1.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="/signalr/hubs"></script>
+
+    <script src="/Scripts/moment.min.js"></script>
+    <script src="/Scripts/Chart.js"></script>
+
+
+    <script src="/Scripts/messagerouterconnection.js"></script>
+    <script src="/Scripts/common.js"></script>
+    <script src="/Scripts/theme.js"></script>
+    <script src="/Scripts/datetime.js"></script>
+    <script src="/Scripts/View/commoncharts.js"></script>
+    <script src="/Scripts/View/datamanager.js"></script>
+    <script src="/Scripts/View/chartmanager.js"></script>
+
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
+
+    <script type="text/javascript">
+    $(function () {
+        var msg =
+                    "<p>I need parameters to work! </p>" +
+                    "Valid parameters:<br />" +
+                    " - name <br />" +
+                    " - width (0-100 percentage value) <br />" +
+                    " - height (0-100 percentage value) <br />" +
+                    " - chartTimeUnit, chartXAxisLabel, chartYAxisLabel, chartXMaxTicksLimit, chartYMaxTicksLimit <br />" +
+                    " - dataMaxNumberOfDataPoints,  <br />" +
+                    " - topic (separate with , for multiple topics. Valid wildcards for subscriptions is * and # (use %23 for #)) <br />" +
+                    " - theme (name of theme on server. Avalible themes: 'c64', 'light', 'lightcream', 'night', 'nightcream', 'sand', 'terminal') <br />" +
+                    " - size (base font-size) <br />" +
+                    "<p>Example: <br />" +
+                    "barchart.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
+
+        var params = function () {
+            var obj =
+            {
+                size: {
+                    width: getQueryParam("width"), //chart
+                    height: getQueryParam("height") //chart
+                },
+                communication: {
+                    topic: getQueryParam("topic"), //connection
+                    name: getQueryParam("name"), //connection
+                    protocol: getQueryParam("protocol", "signalr")
+                },
+                fontSize: getQueryParam("size", 16), //chart, label
+                maintainAspectRatio: (getQueryParam("width", null) == null && getQueryParam("height", null) == null) ? true : false,
+                theme: getQueryParam("theme"), //layout
+                internal: {
+                    rowsToShow: getQueryParam("rowcnt", 10),
+                    currentcount: 0
+                }
+            };
+
+            return obj;
+        }();
+
+        var messageReceived = function (message) {
+            var msg = jQuery.parseJSON(message);
+            
+            //could do ++ up to limit the always remove/add
+            //var cnt = $('#msgList li').length;
+
+            params.internal.currentcount++;
+
+            if (params.internal.currentcount > params.internal.rowsToShow) {
+                //remove last
+                $('#msgList li:last').remove();
+            }
+
+            var timeStamp = getFormatedTime();
+
+            //JSON.stringify(msg, null, 2)
+
+            //add new message post
+            $('#msgList').prepend('<li class="">' + timeStamp + ' <div>' + syntaxHighlight(msg.JsonObject) + '</div></li>');
+            
+        };
+
+        $(document).ready(function () {
+            var connection = communicationFactory.init(params.communication.protocol);
+            //chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
+            connection.broker.onMessage = messageReceived;
+
+            //start connection
+            connection.broker.connect(params.communication.name, params.communication.topic);
+        });
+
+        function syntaxHighlight(json) {
+            if (typeof json != 'string') {
+                json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+
+    });
+
+    </script>
+
+</head>
+<body id="body" style="margin: 0;">
+    <div id="serverStatus" class="error">
+    </div>
+
+    <div id="message">
+    </div>
+    
+    
+    <ul id="msgList">
+        
+    </ul>
+    
 </body>
 </html>

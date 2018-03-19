@@ -32,3 +32,9 @@ ul li {
 .chart-grid-color {
     color: rgba(221,221,221,0.2);
 }
+
+.string { color: olive; }
+.number { color: wheat; }
+.boolean { color: wheat; }
+.null { color: wheat; }
+.key { color: brown; }
