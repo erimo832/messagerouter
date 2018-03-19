@@ -3,8 +3,8 @@
 <head>
     <title></title>
     <!-- theme reference -->
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
-    <link href="/css/StatusTypes.css" rel="stylesheet" />
     <!--
 
         - Refactor code move common stuff into js
@@ -19,6 +19,7 @@
     <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="/signalr/hubs"></script>
     <script src="/Scripts/moment.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
 
     <script src="/Scripts/messagerouterconnection.js"></script>
     <script src="/Scripts/common.js"></script>
@@ -55,7 +56,8 @@
                     protocol: getQueryParam("protocol", "signalr")
                 },
                 fontSize: getQueryParam("size", 16), //chart, label
-                theme: getQueryParam("theme") //layout
+                theme: getQueryParam("theme"),//layout
+                columnSize: getQueryParam("columnSize", 2) //chart, label
             };
 
             return obj;
@@ -68,7 +70,7 @@
             $('#container').empty();
 
             for (var i = 0; i < list.length; i++) {
-                $('#container').append("<span class='" + list[i].Status + "'>" + list[i].Name + "</span> "); //must have a char after span for now so we break rows
+                $('#container').append("<div class='" + list[i].Status + " col-sm-" + params.columnSize + "'>" + list[i].Name + "</div> "); //must have a char after span for now so we break rows
             }
         };
 
@@ -138,6 +140,8 @@
     </div>
     <div id="message">
     </div>
-    <div id="container"></div>
+    <div class="container-fluid">
+        <div id="container" class="row"></div>
+    </div>
 </body>
 </html>
