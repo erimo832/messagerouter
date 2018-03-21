@@ -74,6 +74,7 @@
 
             return obj;
         }();
+        var connection;
 
         var messageReceived = function (message) {
             var msg = jQuery.parseJSON(message);
@@ -118,7 +119,7 @@
         };
 
         $(document).ready(function () {
-            var connection = communicationFactory.init(params.communication.protocol);
+            connection = communicationFactory.init(params.communication.protocol);
             //chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
             connection.broker.onMessage = messageReceived;
             connection.broker.onStatusChange = communicationChanged;
