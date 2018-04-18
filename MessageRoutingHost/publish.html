@@ -21,13 +21,27 @@
 
     $(function () {
         
+        //Adapt new header contract
+        /*  
+            //Header part
+            version
+            propertynamehash
+            messagetype
+            bodid
+            created
+            topic
+
+            dataarea
+                Payload
+        */
+
+
 
         // Declare a proxy to reference the hub.
         var msghub = $.connection.messageRoutingBus;
 
         $('#serverStatus').hide();
-
-
+        
         /*******************************************
         * register server events
         *******************************************/
@@ -43,10 +57,7 @@
                 $('#serverStatus').hide();
             }, 10000);
         };
-
-
-
-
+        
         // Start the connection.
         $.connection.hub.start().done(function () {
             //registerToServer();
@@ -82,24 +93,48 @@
             }, 10000);
         });
 
-
         $(document).ready(function () {
            
 
         });
 
         $.connection.hub.start().done(function () {
-            $('#publish').click(function () {
-
+            $('#createinfomessage').click(function () {
                 var message = {
-                    topic: $('#topic').val(),
-                    level: $('#level').val(),
-                    text: $('#text').val()
+                    Topic: $('#topic').val(),
+                    DataArea: JSON.stringify({
+                        Level: $('#level').val(),
+                        Text: $('#text').val()
+                    })
                 };
 
-                //Publish da message
-                msghub.server.publish(message);
+                $("#messagetosend").val(JSON.stringify(message));
             });
+
+            $('#createdatamessage').click(function () {
+                var message = {
+                    Topic: $('#topic').val(),
+                    DataArea: JSON.stringify({
+                        Timestamp: $('#timestamp').val(),
+                        Value: $('#value').val()
+                    })
+                };
+
+                $("#messagetosend").val(JSON.stringify(message));
+            });
+
+            $('#publish').click(function () {
+
+                //var msg = jQuery.parseJSON($("#messagetosend").val());
+                var msg = $("#messagetosend").val();
+
+                //Publish da message
+                msghub.server.publish(msg);
+            });
+        });
+
+        $.connection.hub.start().done(function () {
+            
         });
 
         $.connection.hub.start().done(function () {
@@ -119,17 +154,68 @@
 
     });
     </script>
-
 </head>
 <body>
     <div id="serverStatus" class="error">
     </div>
     <div>
+        <p>Messages</p>
+        <div>
+            <input type="text" id="topic" value="topic" />
+        </div>
+        <div>
+            <input type="text" id="level" value="level" />
+            <input type="text" id="text" value="message" />
+            <input type="button" id="createinfomessage" value="create info message" />
+        </div>
+        <div>
+            <input type="text" id="timestamp" value="2018-01-01" /> <!-- generate button + default value  -->
+            <input type="text" id="value" value="1.0" />
+            <input type="button" id="createdatamessage" value="create data message" />
+        </div>
+        <div>
+            <textarea id="messagetosend" style="width: 80%; height: 250px" class="textArea color-primary-2 shadow"></textarea>
+        </div>
+        <div>
+            <input type="button" id="publish" value="publish" />
+        </div>
+    </div>
+
+
+    <!--
+        
+    
+    -- Any message
+        Topic
+        ...
+
+    -- MessageObject -- (MessageViewer)
+        DataArea
+            Level
+            Text
+    
+    -- DataObject -- (barchart,linechart, scatterchart)
+        DataArea
+            Timestamp 
+            Value
+
+    -- StatusObject (status)
+        ...
+        DataArea
+            Status
+            Name
+
+
+    -->
+
+
+    <!--<div>
+        <p>Message</p>
         <input type="text" id="topic" value="topic" />
         <input type="text" id="level" value="level" />
         <input type="text" id="text" value="message" />
         <input type="button" id="publish" value="publish" />
-    </div>
+    </div>-->
     <div>
         <p>Publish reset events (to all subscribers)</p>
         <input type="button" id="publishResetAll" value="reset all"/>

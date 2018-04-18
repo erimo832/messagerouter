@@ -90,9 +90,9 @@ namespace MessageRoutingHub.Service
             }
         }
         
-        private void PushMessageToClients(string[] connectionIds, Message msg)
+        private void PushMessageToClients(string[] connectionIds, string json)
         {
-            var json = JsonHelper<Message>.ToJson(msg);
+            //var json = JsonHelper<Message>.ToJson(msg);
 
             foreach (var connectionId in connectionIds)
             {
@@ -111,19 +111,21 @@ namespace MessageRoutingHub.Service
         #endregion
 
         #region publication
-
-        public void Publish(Message msg)
+                
+        public void Publish(string message)
         {
             try
             {
+                var msg = JsonHelper<Message>.FromJson(message);
                 //Get subscribers
                 var subs = TopicRouter.GetSubscribers(msg, ClientList);
 
                 if (subs.Count > 0)
-                    PushMessageToClients(subs.Select(x => x.ConnectionId).ToArray(), msg);
+                    PushMessageToClients(subs.Select(x => x.ConnectionId).ToArray(), message);
             }
             catch { /* avoid unhandled exceptions */ }
         }
+        
 
         public void PublishResetView(string viewType)
         {

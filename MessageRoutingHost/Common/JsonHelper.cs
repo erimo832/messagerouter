@@ -11,5 +11,11 @@ namespace MessageRoutingHub.Common
 
             return json;
         }
+
+        public static T FromJson(string obj)
+        {
+            var jsonSerialiser = new JavaScriptSerializer();
+            return jsonSerialiser.Deserialize<T>(obj);
+        }
     }
 }

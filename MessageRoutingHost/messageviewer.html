@@ -40,7 +40,7 @@
 
             msghub.client.newMessage = function (json) {
                 var msg = jQuery.parseJSON(json);
-                var obj = jQuery.parseJSON(msg.JsonObject);
+                var obj = jQuery.parseJSON(msg.DataArea);
 
                 //could do ++ up to limit the always remove/add
                 var cnt = $('#msgList li').length;

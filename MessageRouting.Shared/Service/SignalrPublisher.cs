@@ -85,7 +85,7 @@ namespace MessageRouting.Shared.Service
 
         #region implementation of interface
 
-        public void Publish(Message msg)
+        public void Publish(string msg)
         {
             try
             {

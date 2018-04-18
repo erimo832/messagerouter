@@ -5,7 +5,7 @@ namespace MessageRouting.Shared.Service
 {
     public interface ISignalrPublisher
     {
-        void Publish(Message msg);
+        void Publish(string msg);
         event EventHandler<string> StatusChanged;
     }
 }

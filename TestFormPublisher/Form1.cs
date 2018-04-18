@@ -61,13 +61,15 @@ namespace TestFormPublisher
             try
             {
 
-                var msg = new MessageRouting.Shared.Model.Message
+                var message = new 
                 {
                     Topic = tbxTopic.Text,
-                    JsonObject = GetJsonObject()
+                    DataArea = GetJsonObject()
                     //Text = tbxMessage.Text,
                     //Level = tbxLevel.Text
                 };
+
+                var msg = JsonHelper<object>.ToJson(message);
 
                 Publiser.Publish(msg);
             }
@@ -87,12 +89,14 @@ namespace TestFormPublisher
 
                 for (int i = 0; i < cnt; i++)
                 {
-                    var msg = new MessageRouting.Shared.Model.Message
+                    var message = new 
                     {
                         Topic = tbxTopicEmulation.Text.Replace("[0]", i.ToString()),
                         //Text = tbxMessageEmulation.Text.Replace("[0]", i.ToString()),
                         //Level = tbxLevelEmulation.Text.Replace("[0]", i.ToString())
                     };
+
+                    var msg = JsonHelper<object>.ToJson(message);
 
                     Publiser.Publish(msg);
 
