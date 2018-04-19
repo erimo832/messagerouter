@@ -102,10 +102,10 @@
             $('#createinfomessage').click(function () {
                 var message = {
                     Topic: $('#topic').val(),
-                    DataArea: JSON.stringify({
+                    DataArea: {
                         Level: $('#level').val(),
                         Text: $('#text').val()
-                    })
+                    }
                 };
 
                 $("#messagetosend").val(JSON.stringify(message));
@@ -114,10 +114,10 @@
             $('#createdatamessage').click(function () {
                 var message = {
                     Topic: $('#topic').val(),
-                    DataArea: JSON.stringify({
+                    DataArea: {
                         Timestamp: $('#timestamp').val(),
                         Value: $('#value').val()
-                    })
+                    }
                 };
 
                 $("#messagetosend").val(JSON.stringify(message));

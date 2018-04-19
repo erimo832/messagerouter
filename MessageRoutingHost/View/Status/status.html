@@ -78,7 +78,7 @@
         var messageReceived = function (message)
         {
             var msg = jQuery.parseJSON(message);
-            var obj = jQuery.parseJSON(msg.DataArea);
+            var obj = msg.DataArea;
             statusManager.add(obj);
 
             var list = statusManager.orderedList();

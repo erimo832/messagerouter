@@ -16,7 +16,7 @@ Chart.defaults.global.defaultFontStyle = "bold";
     /* Callbacks */
     var messageReceived = function (message) {
         var msg = jQuery.parseJSON(message);
-        var dataPoint = jQuery.parseJSON(msg.DataArea);
+        var dataPoint = msg.DataArea;
 
         dataMgr.add(dataPoint);
 
