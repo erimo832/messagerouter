@@ -123,6 +123,18 @@
                 $("#messagetosend").val(JSON.stringify(message));
             });
 
+            $('#createstatusmessage').click(function () {
+                var message = {
+                    Topic: $('#topic').val(),
+                    DataArea: {
+                        Name: $('#name').val(),
+                        Status: $('#status').val()
+                    }
+                };
+
+                $("#messagetosend").val(JSON.stringify(message));
+            });
+
             $('#publish').click(function () {
 
                 //var msg = jQuery.parseJSON($("#messagetosend").val());
@@ -172,6 +184,11 @@
             <input type="text" id="timestamp" value="2018-01-01" /> <!-- generate button + default value  -->
             <input type="text" id="value" value="1.0" />
             <input type="button" id="createdatamessage" value="create data message" />
+        </div>
+        <div>
+            <input type="text" id="name" value="name" />
+            <input type="text" id="status" value="Online" />
+            <input type="button" id="createstatusmessage" value="create status message" />
         </div>
         <div>
             <textarea id="messagetosend" style="width: 80%; height: 250px" class="textArea color-primary-2 shadow"></textarea>
