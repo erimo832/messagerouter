@@ -116,7 +116,7 @@ namespace TestFormPublisher
         }
 
 
-        private string GetJsonObject()
+        private object GetJsonObject()
         {
             if (tcMessages.SelectedTab == tpMessage)
             {
@@ -126,7 +126,8 @@ namespace TestFormPublisher
                     Level = tbxLevel.Text
                 };
 
-                return JsonHelper<TextObject>.ToJson(obj);
+                return obj;
+                //return JsonHelper<TextObject>.ToJson(obj);
             }
             else if (tcMessages.SelectedTab == tpDataValue)
             {
@@ -135,7 +136,9 @@ namespace TestFormPublisher
                     Value = Convert.ToDouble(tbxDvValue.Text),
                     Timestamp = DateTime.Parse(tbxDvTimestamp.Text)
                 };
-                return JsonHelper<DataValueObject>.ToJson(obj);
+
+                return obj;
+                //return JsonHelper<DataValueObject>.ToJson(obj);
             }
             else if (tcMessages.SelectedTab == tpEmulation)
             {

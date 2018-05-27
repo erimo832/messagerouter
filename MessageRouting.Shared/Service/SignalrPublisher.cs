@@ -49,7 +49,7 @@ namespace MessageRouting.Shared.Service
                     //most for logging
                     connection.StateChanged += ConnectionStateChanged;
                     connection.Error += ConnectionError;
-
+                    
                     //could have an wait or await on it. If its sequence is importans
                     connection.Start().Wait();
                 }
@@ -73,11 +73,13 @@ namespace MessageRouting.Shared.Service
 
         private void ConnectionError(Exception obj)
         {
+            //connection.Dispose();
             LogConnectionInformation("", obj);
         }
 
         private void ConnectionClosed()
         {
+            //connection.Dispose();
             Connect();
         }
 
@@ -91,7 +93,7 @@ namespace MessageRouting.Shared.Service
             {
                 if (connection.State == ConnectionState.Connected)
                 {
-                    var task = PublisherHubProxy.Invoke("Publish", msg);
+                    var task = PublisherHubProxy.Invoke("Publish", msg);                    
                     task.Wait();
                 }
 
