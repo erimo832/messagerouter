@@ -12,12 +12,20 @@
     <script src="Scripts/datetime.js"></script>  
        
     <script type="text/javascript">
+        function escapeRegExp(str) {
+            return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+        }
+
+        function replaceAll(str, find, replace) {
+            return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+        }
+
         //Some other 
         var currentCnt = 0;
         var rowcnt = getQueryParam("rowcnt", 10);
         var brokerUrl = getQueryParam("brokerUrl", "broker.mqttdashboard.com");
         var brokerport = Number(getQueryParam("brokerport", 8000));
-        var topic = getQueryParam("topic", "#").replace("$", "#").replace("!", "/");
+        var topic = replaceAll(replaceAll(getQueryParam("topic", "#"), "$", "#"), "!", "/");
 
         //Using the HiveMQ public Broker, with a random client Id
         var client = new Messaging.Client(brokerUrl, brokerport, "myclientid_" + parseInt(Math.random() * 100, 10));
@@ -78,35 +86,35 @@
         
         function updateStatus(status) {
             switch (status) {
-                case "connected":
-                    $("#btnConnect").css("background-color", "lightgreen");
-                    $("#btnDisconnect").css("background-color", "lightgrey");
-                    $("#btnSub").css("background-color", "lightgrey");
+            case "connected":
+                $("#btnConnect").css("background-color", "lightgreen");
+                $("#btnDisconnect").css("background-color", "lightgrey");
+                $("#btnSub").css("background-color", "lightgrey");
 
-                    $("#btnConnect").prop("disabled", true);
-                    $("#btnDisconnect").prop("disabled", false);
-                    $("#btnSub").prop("disabled", false);
-                    break;
-                case "disconnected":
-                    $("#btnConnect").css("background-color", "lightgrey");
-                    $("#btnDisconnect").css("background-color", "lightgrey");
-                    $("#btnSub").css("background-color", "lightgrey");
+                $("#btnConnect").prop("disabled", true);
+                $("#btnDisconnect").prop("disabled", false);
+                $("#btnSub").prop("disabled", false);
+                break;
+            case "disconnected":
+                $("#btnConnect").css("background-color", "lightgrey");
+                $("#btnDisconnect").css("background-color", "lightgrey");
+                $("#btnSub").css("background-color", "lightgrey");
 
-                    $("#btnConnect").prop("disabled", false);
-                    $("#btnDisconnect").prop("disabled", true);
-                    $("#btnSub").prop("disabled", true);
-                    break;
-                case "subscribed":
-                    $("#btnConnect").css("background-color", "lightgreen");
-                    $("#btnDisconnect").css("background-color", "lightgrey");
-                    $("#btnSub").css("background-color", "lightgreen");
+                $("#btnConnect").prop("disabled", false);
+                $("#btnDisconnect").prop("disabled", true);
+                $("#btnSub").prop("disabled", true);
+                break;
+            case "subscribed":
+                $("#btnConnect").css("background-color", "lightgreen");
+                $("#btnDisconnect").css("background-color", "lightgrey");
+                $("#btnSub").css("background-color", "lightgreen");
 
-                    $("#btnConnect").prop("disabled", true);
-                    $("#btnDisconnect").prop("disabled", false);
-                    $("#btnSub").prop("disabled", true);
-                    break;
-                default:
-                    break;
+                $("#btnConnect").prop("disabled", true);
+                $("#btnDisconnect").prop("disabled", false);
+                $("#btnSub").prop("disabled", true);
+                break;
+            default:
+                break;
             }
         }
 
@@ -114,7 +122,7 @@
 	<meta charset="utf-8" />
 </head>
 <body>
-    <div>topic in url. Use + instead of # and ! instead of /. Example DUGA/# should be topic=DUGA!$ in url</div>
+    <div>topic in url. Use $ instead of # and ! instead of /. Example DUGA/# should be topic=DUGA!$ in url</div>
     <button id="btnConnect" onclick="client.connect(options);">1. Connect</button>
     <button id="btnSub" onclick="subscribe()" disabled="true">2. Subscribe</button>
     <button onclick="publish('Hello Foo !', topic, 2);" disabled="true">3. Publish</button>
