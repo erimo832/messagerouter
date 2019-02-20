@@ -17,6 +17,7 @@
         var rowcnt = getQueryParam("rowcnt", 10);
         var brokerUrl = getQueryParam("brokerUrl", "broker.mqttdashboard.com");
         var brokerport = Number(getQueryParam("brokerport", 8000));
+        var topic = getQueryParam("topic", "#").replace("$", "#").replace("!", "/");
 
         //Using the HiveMQ public Broker, with a random client Id
         var client = new Messaging.Client(brokerUrl, brokerport, "myclientid_" + parseInt(Math.random() * 100, 10));
@@ -25,6 +26,7 @@
         client.onConnectionLost = function (responseObject) {
             //Depending on your scenario you could implement a reconnect logic here
             alert("connection lost: " + responseObject.errorMessage);
+            updateStatus("disconnected");
         };
 
         //Gets called whenever you receive a message for your subscriptions
@@ -49,10 +51,13 @@
             timeout: 3,
             //Gets Called if the connection has sucessfully been established
             onSuccess: function () {
-                alert("Connected");
+                //alert("Connected");
+                updateStatus("connected");
             },
             //Gets Called if the connection could not be established
             onFailure: function (message) {
+                $("#btnConnect").enable(true);
+                $("#btnConnect").css("background-color", "indianred");
                 alert("Connection failed: " + message.errorMessage);
             }
         };
@@ -65,14 +70,55 @@
             message.qos = qos;
             client.send(message);
         }
+
+        var subscribe = function() {
+            client.subscribe(topic, { qos: 0 });
+            updateStatus("subscribed");
+        }
+        
+        function updateStatus(status) {
+            switch (status) {
+                case "connected":
+                    $("#btnConnect").css("background-color", "lightgreen");
+                    $("#btnDisconnect").css("background-color", "lightgrey");
+                    $("#btnSub").css("background-color", "lightgrey");
+
+                    $("#btnConnect").prop("disabled", true);
+                    $("#btnDisconnect").prop("disabled", false);
+                    $("#btnSub").prop("disabled", false);
+                    break;
+                case "disconnected":
+                    $("#btnConnect").css("background-color", "lightgrey");
+                    $("#btnDisconnect").css("background-color", "lightgrey");
+                    $("#btnSub").css("background-color", "lightgrey");
+
+                    $("#btnConnect").prop("disabled", false);
+                    $("#btnDisconnect").prop("disabled", true);
+                    $("#btnSub").prop("disabled", true);
+                    break;
+                case "subscribed":
+                    $("#btnConnect").css("background-color", "lightgreen");
+                    $("#btnDisconnect").css("background-color", "lightgrey");
+                    $("#btnSub").css("background-color", "lightgreen");
+
+                    $("#btnConnect").prop("disabled", true);
+                    $("#btnDisconnect").prop("disabled", false);
+                    $("#btnSub").prop("disabled", true);
+                    break;
+                default:
+                    break;
+            }
+        }
+
     </script>
 	<meta charset="utf-8" />
 </head>
 <body>
-    <button onclick="client.connect(options);">1. Connect</button>
-    <button onclick="client.subscribe('testtopic/#', {qos: 2}); alert('Subscribed');">2. Subscribe</button>
-    <button onclick="publish('Hello Foo !','testtopic/bar',2);">3. Publish</button>
-    <button onclick="client.disconnect();">(4. Disconnect)</button>
+    <div>topic in url. Use + instead of # and ! instead of /. Example DUGA/# should be topic=DUGA!$ in url</div>
+    <button id="btnConnect" onclick="client.connect(options);">1. Connect</button>
+    <button id="btnSub" onclick="subscribe()" disabled="true">2. Subscribe</button>
+    <button onclick="publish('Hello Foo !', topic, 2);" disabled="true">3. Publish</button>
+    <button id="btnDisconnect" onclick="client.disconnect();" disabled="true">(4. Disconnect)</button>
     <div id="messages"></div>
 
     <div id="message">
