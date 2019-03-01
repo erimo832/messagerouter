@@ -1,4 +1,4 @@
-﻿/* to be implemented */
+﻿/* TODO: IMPLEMENT */
 
 var mqttConnection = (function ($) {
     var obj = {};

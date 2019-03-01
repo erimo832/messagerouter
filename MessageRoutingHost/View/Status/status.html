@@ -14,7 +14,7 @@
 
         - Possible to show area between values
     -->
-
+    <script src="Scripts/mqttws31.js"></script> <!-- to support MQTT protocol -->
     <script src="/Scripts/jquery-2.2.1.min.js"></script>
     <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="/signalr/hubs"></script>
@@ -78,7 +78,7 @@
         var messageReceived = function (message)
         {
             var msg = jQuery.parseJSON(message);
-            var obj = msg.DataArea;
+            var obj = msg.DataArea; //TODO: Might not contain this? Param
             statusManager.add(obj);
 
             var list = statusManager.orderedList();
@@ -119,7 +119,7 @@
             }
             else
             {
-                statusManager.init("Name");
+                statusManager.init("Name"); //TODO: Param for this one 
 
                 connection = communicationFactory.init(params.communication.protocol);
 
