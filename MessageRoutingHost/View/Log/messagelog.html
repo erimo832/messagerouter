@@ -5,17 +5,8 @@
     <!-- theme reference -->
     <link href="/Content/bootstrap.css" rel="stylesheet" />
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
-    <!--
-
-        - Refactor code move common stuff into js
-        - add some parameter
-        - Show area?
-        -
-
-        - Possible to show area between values
-    -->
-
-
+    
+    <script src="/Scripts/mqttws31.js"></script> <!-- to support MQTT protocol -->
     <script src="/Scripts/jquery-2.2.1.min.js"></script>
     <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="/signalr/hubs"></script>
@@ -27,9 +18,9 @@
     <script src="/Scripts/common.js"></script>
     <script src="/Scripts/theme.js"></script>
     <script src="/Scripts/datetime.js"></script>
-    <script src="/Scripts/View/commoncharts.js"></script>
+    <!--<script src="/Scripts/View/commoncharts.js"></script>
     <script src="/Scripts/View/datamanager.js"></script>
-    <script src="/Scripts/View/chartmanager.js"></script>
+    <script src="/Scripts/View/chartmanager.js"></script>-->
 
     <script src="/Scripts/Communication/communicationfactory.js"></script>
     <script src="/Scripts/Communication/mqttConnection.js"></script>
@@ -61,7 +52,9 @@
                 communication: {
                     topic: getQueryParam("topic"), //connection
                     name: getQueryParam("name"), //connection
-                    protocol: getQueryParam("protocol", "signalr")
+                    protocol: getQueryParam("protocol", "signalr"),
+                    brokerurl: getQueryParam("brokerurl"),
+                    port: getQueryParam("port", 1883)
                 },
                 fontSize: getQueryParam("size", 16), //chart, label
                 maintainAspectRatio: (getQueryParam("width", null) == null && getQueryParam("height", null) == null) ? true : false,
@@ -76,7 +69,7 @@
         }();
         var connection;
 
-        var messageReceived = function (message) {
+        var messageReceived = function (message, topic) {
             var msg = jQuery.parseJSON(message);
             
             params.internal.currentcount++;
@@ -89,7 +82,7 @@
             var timeStamp = getFormatedTime();
 
             //add new message post
-            $('#msgList').prepend('<li class="">' + timeStamp + ' <div>' + syntaxHighlight(msg.DataArea) + '</div></li>');
+            $('#msgList').prepend('<li class="">' + timeStamp + ' <div>' + syntaxHighlight(msg) + '</div></li>');
             
         };
 
@@ -115,13 +108,12 @@
 
         $(document).ready(function () {
             connection = communicationFactory.init(params.communication.protocol);
-            //chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
             connection.broker.onMessage = messageReceived;
             connection.broker.onStatusChange = communicationChanged;
             connection.broker.onError = communicationError;
 
             //start connection
-            connection.broker.connect(params.communication.name, params.communication.topic);
+            connection.broker.connect(params.communication);
         });
 
         function syntaxHighlight(json) {

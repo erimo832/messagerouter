@@ -13,7 +13,7 @@
         };
         hub.client.newMessage = function (msg) {
             if (typeof obj.onMessage === "function") {
-                obj.onMessage(msg);
+                obj.onMessage(msg, "Add support");
             }
         };
         $.connection.hub.disconnected(function () {
@@ -60,15 +60,16 @@
     obj.onMessage;
     obj.onStatusChange;
     obj.onError;
-    obj.ConnectionEnum;
-    obj.connect = function (connectionName, subscriptionTopics) {
+    obj.ConnectionEnum;    
+    //obj.connect = function (connectionName, subscriptionTopics) {
+    obj.connect = function (settings) {
         hub = $.connection.messageRoutingBus;
 
-        if(connectionName)
-            name = connectionName;
+        if (settings.name)
+            name = settings.name;
         
-        if (subscriptionTopics) {
-            topic = subscriptionTopics.split(",");;
+        if (settings.topic) {
+            topic = settings.topic.split(",");;
         }
         
         registerEvents(hub);

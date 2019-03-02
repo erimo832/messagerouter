@@ -162,6 +162,7 @@
     <Content Include="Scripts\View\commoncharts.js" />
     <Content Include="Scripts\View\datamanager.js" />
     <Content Include="Scripts\View\statusmanager.js" />
+    <Content Include="todo.txt" />
     <Content Include="View\Chart\barchart.html" />
     <Content Include="View\Chart\linechart.html" />
     <Content Include="View\Chart\scatterchart.html" />

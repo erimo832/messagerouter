@@ -4,18 +4,8 @@
     <title></title>
     <!-- theme reference -->
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
-
-    <!--
-        
-        - Refactor code move common stuff into js
-        - add some parameter         
-        - Show area?
-        -
-
-        - Possible to show area between values
-    -->
-
-
+    
+    <script src="/Scripts/mqttws31.js"></script> <!-- to support MQTT protocol -->
     <script src="/Scripts/jquery-2.2.1.min.js"></script>
     <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="/signalr/hubs"></script>
@@ -75,7 +65,9 @@
                 communication: {
                     topic: getQueryParam("topic"), //connection
                     name: getQueryParam("name"), //connection
-                    protocol: getQueryParam("protocol", "signalr")
+                    protocol: getQueryParam("protocol", "signalr"),
+                    brokerurl: getQueryParam("brokerurl"),
+                    port: getQueryParam("port", 1883)
                 },
                 chart: {
                     steppedLine: getQueryParam("steppedLine", false) != false ? true : false, //some bug in chartjs should support before and after getQueryParam("steppedLine", false)  (test in newer versions of chartjs)

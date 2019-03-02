@@ -41,23 +41,7 @@
                     " - xaxislabel (complete topic (aggregatelevel) if empty. Otherwise ex: 0,2 from topic XXX.YYY.ZZZ gives XXX.ZZZ) <br />" +
                     "<p>Example: <br />" +
                     "messagechart.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
-
-
-        /*TODO:
-        - Refactor this file
-            - Move "common" dataset handling
-        - Refactor signalr connection
-            - Split connection
-            - Subscribe part
-            - Publish part
-        - Spider chart option
-        - Test other js chart library
-        - Add reset data counter button
-        - Add last reset time somewhere small
-        - Create group by day, bars for one "topic"
-        - Problem log loses connection it seems like
-        */
-
+        
         //chart defaults
         Chart.defaults.global.legend.display = false;
         Chart.defaults.global.defaultFontStyle = "bold";

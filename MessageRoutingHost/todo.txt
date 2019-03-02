@@ -1,0 +1,61 @@
+﻿//TODO:   
+
+Support legacy {Topic, DataArea}
+Topic hantering
+
+refactor old pages
+- Use communication factory
+- same way to handle settings
+- 
+
+- messagechart.html
+- messageviewer.html
+- publish.html
+
+
+
+
+theme
+- Producing 
+- Waiting etc
+
+
+
+barchart/linechart
+	- Refactor code move common stuff into js
+	- add some parameter
+	- Show area?        
+
+	- Possible to show area between values
+
+
+
+/*TODO: (from status.html)
+        - Refactor this file
+            - Move "common" dataset handling
+        - Refactor signalr connection
+            - Split connection
+            - Subscribe part
+            - Publish part
+        - Spider chart option
+        - Test other js chart library
+        - Add reset data counter button
+        - Add last reset time somewhere small
+        - Create group by day, bars for one "topic"
+        - Problem log loses connection it seems like (signalR)
+        */
+
+
+/*
+
+        function escapeRegExp(str) {
+            return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+        }
+
+        function replaceAll(str, find, replace) {
+            return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+        }
+        var topic = replaceAll(replaceAll(getQueryParam("topic", "#"), "$", "#"), "!", "/");
+               
+
+*/

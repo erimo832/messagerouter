@@ -14,9 +14,8 @@ Chart.defaults.global.defaultFontStyle = "bold";
     var connectionMgr = null;
     
     /* Callbacks */
-    var messageReceived = function (message) {
-        var msg = jQuery.parseJSON(message);
-        var dataPoint = msg.DataArea;
+    var messageReceived = function (message, topic) {
+        var dataPoint = jQuery.parseJSON(message);
 
         dataMgr.add(dataPoint);
 
@@ -77,7 +76,7 @@ Chart.defaults.global.defaultFontStyle = "bold";
         dataManager.init(settings.dataSettings.dataMaxNumberOfDataPoints, settings.dataSettings.dataSaveWindowSeconds);
 
         //start connection
-        connectionManager.broker.connect(settings.communication.name, settings.communication.topic);
+        connectionManager.broker.connect(settings.communication);
     };
 
     return obj;
