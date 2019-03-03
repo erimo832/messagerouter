@@ -12,8 +12,8 @@ function getQueryParam(paramName, defaultValue) {
         query = query.split("%20").join(" ");
         query = query.split("%23").join("#");
         query = query.split("%27").join("'");
-
-
+        query = query.split("%2F").join("/");
+        
         var params = query.split("&");
 
         //style, format, offset

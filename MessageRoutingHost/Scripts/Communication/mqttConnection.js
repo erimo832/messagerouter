@@ -1,6 +1,6 @@
 ﻿var mqttConnection = (function ($) {
     var obj = {};
-    var topic = []; //['#'];
+    var topic = [];
     var config;
     var client;
     var isConnected = false;

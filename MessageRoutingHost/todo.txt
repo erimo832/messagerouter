@@ -5,11 +5,24 @@ Topic hantering
 - different topic std (xxx.xxx.xxx or xxxx/xxx/xxx)
 - different wild card. Is that a problem
 
-- dynamic column names
-	- linechart
-	- barchart
-	- status
-	- messageviewer
+/*
+
+/ %2F
+# %23
++
+*
+
+
+        function escapeRegExp(str) {
+            return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+        }
+
+        function replaceAll(str, find, replace) {
+            return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+        }
+        var topic = replaceAll(replaceAll(getQueryParam("topic", "#"), "$", "#"), "!", "/");
+*/
+
 
 
 theme
@@ -18,7 +31,7 @@ theme
 
 - Check default text color for all themes
 
-
+Fix better help for pages
 
 
 Handle 
@@ -55,16 +68,3 @@ barchart/linechart
         */
 
 
-/*
-
-        function escapeRegExp(str) {
-            return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-        }
-
-        function replaceAll(str, find, replace) {
-            return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
-        }
-        var topic = replaceAll(replaceAll(getQueryParam("topic", "#"), "$", "#"), "!", "/");
-               
-
-*/

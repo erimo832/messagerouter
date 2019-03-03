@@ -44,6 +44,10 @@
                     brokerurl: getQueryParam("brokerurl"),
                     port: getQueryParam("port", 1883)
                 },
+                dataSettings: {
+                    levelColumn: getQueryParam("levelColumn", "Level"),
+                    textColumn: getQueryParam("textColumn", "Text"),
+                },
                 fontSize: getQueryParam("size", 16), //chart, label
                 theme: getQueryParam("theme"), //layout
                 internal: {
@@ -70,8 +74,8 @@
             }
 
             var timeStamp = getFormatedTime();
-            var cssClass = message.Level == null ? "" : message.Level;
-            var msg = message.Text == null ? message : message.Text;
+            var cssClass = message[params.dataSettings.levelColumn] == null ? "" : message[params.dataSettings.levelColumn];
+            var msg = message[params.dataSettings.textColumn] == null ? message : message[params.dataSettings.textColumn];
 
             //add new message post
             $('#msgList').prepend('<li class=' + cssClass + '>' + timeStamp + ' <div>' + msg + '</div></li>');

@@ -72,7 +72,7 @@ Chart.defaults.global.defaultFontStyle = "bold";
         connectionManager.broker.onError = communicationError;
 
         //init data manager
-        dataManager.init(settings.dataSettings.dataMaxNumberOfDataPoints, settings.dataSettings.dataSaveWindowSeconds);
+        dataManager.init(settings.dataSettings.dataMaxNumberOfDataPoints, settings.dataSettings.dataSaveWindowSeconds, settings.dataSettings.timeStampColumn, settings.dataSettings.valueColumn);
 
         //start connection
         connectionManager.broker.connect(settings.communication);

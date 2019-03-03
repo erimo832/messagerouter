@@ -1,7 +1,7 @@
 ﻿var signalrConnection = (function ($) {
     var obj = {};
     var hub;
-    var topic = [];//['#'];
+    var topic = [];
     var name = "NoDefinedName";
     
     //private        
@@ -69,11 +69,7 @@
 
         if (settings.name)
             name = settings.name;
-        
-        //if (settings.topic) {
-        //    topic = settings.topic.split(",");
-        //}
-        
+                
         registerEvents(hub);
     };
     obj.addSubscriptions = function (topics) {

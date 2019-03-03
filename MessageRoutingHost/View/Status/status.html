@@ -48,6 +48,10 @@
                     brokerurl: getQueryParam("brokerurl", "localhost"),
                     port: getQueryParam("port", 1883)
                 },
+                dataSettings: {
+                    nameColumn: getQueryParam("nameColumn", "Name"),
+                    statusColumn: getQueryParam("statusColumn", "Status"),
+                },
                 fontSize: getQueryParam("size", 16), //chart, label
                 theme: getQueryParam("theme"),//layout
                 columnSize: getQueryParam("columnSize", 2) //chart, label
@@ -63,7 +67,7 @@
             $('#container').empty();
 
             for (var i = 0; i < list.length; i++) {
-                $('#container').append("<div class='" + list[i].Status + " col-sm-" + params.columnSize + "'>" + list[i].Name + "</div> "); //must have a char after span for now so we break rows
+                $('#container').append("<div class='" + list[i][params.dataSettings.statusColumn] + " col-sm-" + params.columnSize + "'>" + list[i][params.dataSettings.nameColumn] + "</div> "); //must have a char after span for now so we break rows
             }
         };
 
@@ -110,7 +114,7 @@
             }
             else
             {
-                statusManager.init("Name"); 
+                statusManager.init(params.dataSettings.nameColumn); 
 
                 connection = communicationFactory.init(params.communication.protocol);
 

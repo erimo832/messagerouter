@@ -54,7 +54,9 @@
             {
                 dataSettings: {
                     dataMaxNumberOfDataPoints: getQueryParam("dataMaxNumberOfDataPoints", 100), //chart data
-                    dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000) //chart data
+                    dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000), //chart data
+                    timeStampColumn: getQueryParam("timeStampColumn", "Timestamp"),
+                    valueColumn: getQueryParam("valueColumn", "Value"),
                 },
                 size: {
                     width: getQueryParam("width"), //chart
@@ -66,7 +68,7 @@
                     protocol: getQueryParam("protocol", "signalr"),
                     brokerurl: getQueryParam("brokerurl", "localhost"),
                     port: getQueryParam("port", 1883)
-                },
+                },                
                 chart: {
                     steppedLine: getQueryParam("steppedLine", false) != false ? true : false, //some bug in chartjs should support before and after getQueryParam("steppedLine", false)  (test in newer versions of chartjs)
                     fill: getQueryParam("fill", false) != false ? true : false,
