@@ -12,8 +12,7 @@
     <script src="/signalr/hubs"></script>
     <script src="/Scripts/moment.min.js"></script>
     <script src="/Scripts/bootstrap.min.js"></script>
-
-    <script src="/Scripts/messagerouterconnection.js"></script>
+        
     <script src="/Scripts/common.js"></script>
     <script src="/Scripts/theme.js"></script>
     <script src="/Scripts/datetime.js"></script>
@@ -44,9 +43,9 @@
                 },
                 communication: {
                     topic: getQueryParam("topic"), //connection
-                    name: getQueryParam("name"), //connection
+                    name: getQueryParam("name", "NotDefined"), //connection
                     protocol: getQueryParam("protocol", "signalr"),
-                    brokerurl: getQueryParam("brokerurl"),
+                    brokerurl: getQueryParam("brokerurl", "localhost"),
                     port: getQueryParam("port", 1883)
                 },
                 fontSize: getQueryParam("size", 16), //chart, label
@@ -70,11 +69,8 @@
 
         /* Callbacks */
         var messageReceived = function (message, topic)
-        {
-            var msg = jQuery.parseJSON(message);
-            //var obj = msg.DataArea; 
-            var obj = msg;
-            statusManager.add(obj);
+        {                        
+            statusManager.add(message);
 
             var list = statusManager.orderedList();
 

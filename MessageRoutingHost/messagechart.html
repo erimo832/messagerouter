@@ -5,8 +5,7 @@
     <!-- theme reference -->
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
 
-    <!--<script src="Scripts/json2.js"></script>-->
-
+    <script src="/Scripts/mqttws31.js"></script> <!-- to support MQTT protocol -->
     <script src="Scripts/jquery-2.2.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="signalr/hubs"></script>
@@ -14,11 +13,14 @@
     <!-- test chart js -->
     <script src="Scripts/Chart.js"></script>
 
-    <script src="Scripts/messagerouterconnection.js"></script>
     <script src="Scripts/common.js"></script>
     <script src="Scripts/theme.js"></script>
     <script src="Scripts/datetime.js"></script>
+    <script src="/Scripts/View/commoncharts.js"></script>
 
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
 
     <script type="text/javascript">
     $(function () {
@@ -42,23 +44,51 @@
                     "<p>Example: <br />" +
                     "messagechart.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
         
+
+        var params = function () {
+            var obj =
+            {
+                size: {
+                    width: getQueryParam("width", 800), //chart
+                    height: getQueryParam("height", 400) //chart
+                },
+                communication: {
+                    topic: getQueryParam("topic"), //connection
+                    name: getQueryParam("name", "NotDefined"), //connection
+                    protocol: getQueryParam("protocol", "signalr"),
+                    brokerurl: getQueryParam("brokerurl", "localhost"),
+                    port: getQueryParam("port", 1883)
+                },
+                name: getQueryParam("name", "NoDefinedName"),                
+                theme: getQueryParam("theme"), //layout                
+                chart: {
+                    size: getQueryParam("size", 16),
+                    aggregatelevel: getQueryParam("aggregatelevel", 4),
+                    xaxislabel: getQueryParam("xaxislabel", "-1")
+                }
+            };
+
+            return obj;
+        }();
+
         //chart defaults
         Chart.defaults.global.legend.display = false;
         Chart.defaults.global.defaultFontStyle = "bold";
+        
+        var connection;
+
         
         var ctx = $("#chart");
         var myBarChart;
         //default settings
         var dataset = [];
-
-        var xaxislabel;
-
+        
         function getlabel(name)
         {
-            if (xaxislabel == "-1")
+            if (params.chart.xaxislabel == "-1")
                 return name;
 
-            var indexes = xaxislabel.split(",");
+            var indexes = params.chart.xaxislabel.split(",");
             var parts = name.split(".");
             var result = "";
 
@@ -74,10 +104,8 @@
             return result;
         }
         
-        function addMessageToDataset(msg, aggregatelevel)
+        function addMessageToDataset(topic, aggregatelevel)
         {
-            var topic = msg.Topic;
-
             //get the name that it should sum under
             var parts = topic.split(".");
             var name = "";
@@ -139,87 +167,95 @@
             return data;
         }
 
+        /* Callbacks */
+        var messageReceived = function (message, topic) {
+            addMessageToDataset(topic, params.chart.aggregatelevel);
+
+            var data = createChartJsDataset();
+
+            if (myBarChart != null) {
+                myBarChart.destroy();
+            }
+
+            var gridcolor = getStyleRuleValue('color', '.chart-grid-color');
+
+            myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: false,
+                    hover: {
+                        mode: 'x-axis'
+                    },
+                    scales: {
+                        xAxes: [{
+                            gridLines: {
+                                color: gridcolor
+                            },
+                            ticks: {
+                                fontSize: params.chart.size,
+                                fontColor: gridcolor
+                            }
+                        }],
+                        yAxes: [{
+                            gridLines: {
+                                color: gridcolor
+                            },
+                            ticks: {
+                                fontSize: params.chart.size,
+                                fontColor: gridcolor,
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        var communicationChanged = function (status, message) {
+            if (status === connection.ConnectionEnum.Connected) {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+
+                //Show for only 10sec
+                setTimeout(function () {
+                    $("#serverStatus").hide();
+                }, 10000);
+            }
+            else {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+            }
+            console.log(message);
+        }
+
+        var communicationError = function (message) {
+            console.log(message);
+        };
+
         $(document).ready(function () {
-            var msghub = startSignalrConnection(msg);
-            var fontSize = getQueryParam("size", 16);
-            var agglevel = getQueryParam("aggregatelevel", 4);
+            //init
+            $("#chart").attr("width", params.size.width);
+            $("#chart").attr("height", params.size.height);
 
-            xaxislabel = getQueryParam("xaxislabel", "-1");
 
-            //Set size of chart
-            var width = getQueryParam("width", 800);
-            var height = getQueryParam("height", 400);
-            $("#chart").attr("width", width);
-            $("#chart").attr("height", height);
+            connection = communicationFactory.init(params.communication.protocol);
+
+            //Register for events
+            connection.broker.onMessage = messageReceived;
+            connection.broker.onStatusChange = communicationChanged;
+            connection.broker.onError = communicationError;
+
+            connection.broker.connect(params.communication);
+
             
+            //TODO: Fix reset chart command
             //register for event
-            msghub.client.resetView = function (viewType) {
+            /*msghub.client.resetView = function (viewType) {
                 if (viewType == "all" || viewType == "chart") {
                     resetView();
                 }
-            };
-
-            msghub.client.newMessage = function (json) {
-                var msg = jQuery.parseJSON(json);
-                //Level, Text, Topic
-
-                addMessageToDataset(msg, agglevel);
-
-                var data = createChartJsDataset();
-
-                if (myBarChart != null) {
-                    myBarChart.destroy();
-                }
-
-                var gridcolor = getStyleRuleValue('color', '.chart-grid-color');
-                
-                myBarChart = new Chart(ctx, {                    
-                    type: 'bar',
-                    data: data,
-                    options: {
-                        responsive: false,
-                        hover: {                          
-                            mode: 'x-axis'
-                        },
-                        scales: {
-                            xAxes: [{                                
-                                gridLines: {
-                                    color: gridcolor
-                                },
-                                ticks: {
-                                    fontSize: fontSize,
-                                    fontColor: gridcolor
-                                }
-                            }],
-                            yAxes: [{                                
-                                gridLines: {
-                                    color: gridcolor
-                                },
-                                ticks: {
-                                    fontSize: fontSize,
-                                    fontColor: gridcolor,
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });               
-            };
-
-            $('#body').keyup(function (event) {
-                if (event.which == 82) {
-                    resetView();
-                }
-            });
-
-            function resetView() {
-                //Clear dataset
-                dataset = [];
-
-                if (myBarChart != null) {
-                    myBarChart.destroy();
-                }
-            }
+            };*/
         });
     });
     </script>

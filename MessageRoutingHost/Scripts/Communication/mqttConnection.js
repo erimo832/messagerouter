@@ -52,7 +52,8 @@
 
         client.onMessageArrived = function (message) {
             if (typeof obj.onMessage === "function") {
-                obj.onMessage(message.payloadString, message.destinationName);
+                var msg = parsePayload(message.payloadString);
+                obj.onMessage(msg, message.destinationName);
             }
         };       
         

@@ -6,8 +6,7 @@
     <!-- theme reference -->
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
 
-    <!--<script src="Scripts/json2.js"></script>-->
-
+    <script src="/Scripts/mqttws31.js"></script> <!-- to support MQTT protocol -->
     <script src="Scripts/jquery-2.2.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="signalr/hubs"></script>
@@ -16,7 +15,9 @@
     <script src="Scripts/common.js"></script>
     <script src="Scripts/theme.js"></script>  
     <script src="Scripts/datetime.js"></script>  
-   
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
 
     <script type="text/javascript">
     $(function () {
@@ -32,49 +33,81 @@
                     "<p>Example: <br />" +
                     "messageviewer.html?name=xyz&topic=topic1.*,topic2.%23&theme=night</p>";
 
-        $(document).ready(function () {
-            var rowcnt = getQueryParam("rowcnt", 10);
-            var currentCnt = 0;
 
-            var msghub = startSignalrConnection(msg);
-
-            msghub.client.newMessage = function (json) {
-                var msg = jQuery.parseJSON(json);
-                var obj = msg.DataArea;
-
-                //could do ++ up to limit the always remove/add
-                var cnt = $('#msgList li').length;
-
-                currentCnt++;
-
-                if (currentCnt > rowcnt) {
-                    //remove last
-                    $('#msgList li:last').remove();
-                }
-
-                var timeStamp = getFormatedTime();
-
-                //add new message post
-                $('#msgList').prepend('<li class=' + obj.Level + '>' + timeStamp + ' <div>' + obj.Text + '</div></li>');
-            };
-
-            msghub.client.resetView = function (viewType) {
-                if (viewType == "all" || viewType == "list") {
-                    resetView();
+        var params = function () {
+            var obj =
+            {
+                communication: {
+                    topic: getQueryParam("topic"), //connection
+                    name: getQueryParam("name","NotDefined"), //connection
+                    protocol: getQueryParam("protocol", "signalr"),
+                    brokerurl: getQueryParam("brokerurl"),
+                    port: getQueryParam("port", 1883)
+                },
+                fontSize: getQueryParam("size", 16), //chart, label
+                theme: getQueryParam("theme"), //layout
+                internal: {
+                    rowsToShow: getQueryParam("rowcnt", 10),
+                    currentcount: 0
                 }
             };
+            
+            return obj;
+        }();
 
-            $('#body').keyup(function (event) {
-                if (event.which == 82) {
-                    resetView();
-                }
-            });
+        var connection;
 
-            function resetView() {
-                $('#msgList li').remove();
+         /* Callbacks */
+        var messageReceived = function (message, topic) {            
+            //could do ++ up to limit the always remove/add
+            var cnt = $('#msgList li').length;
 
-                currentCnt = 0;
+            params.internal.currentcount++; //currentCnt++;
+
+            if (params.internal.currentcount > params.internal.rowsToShow) {
+                //remove last
+                $('#msgList li:last').remove();
             }
+
+            var timeStamp = getFormatedTime();
+            var cssClass = message.Level == null ? "" : message.Level;
+            var msg = message.Text == null ? message : message.Text;
+
+            //add new message post
+            $('#msgList').prepend('<li class=' + cssClass + '>' + timeStamp + ' <div>' + msg + '</div></li>');
+        }
+
+        var communicationChanged = function (status, message) {
+            if (status === connection.ConnectionEnum.Connected) {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+
+                //Show for only 10sec
+                setTimeout(function () {
+                    $("#serverStatus").hide();
+                }, 10000);
+            }
+            else {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+            }
+            console.log(message);
+        };
+
+        var communicationError = function (message) {
+            console.log(message);
+        };
+
+        $(document).ready(function () {
+
+            connection = communicationFactory.init(params.communication.protocol);
+
+            //Register for events
+            connection.broker.onMessage = messageReceived;
+            connection.broker.onStatusChange = communicationChanged;
+            connection.broker.onError = communicationError;
+
+            connection.broker.connect(params.communication);            
         });
     });
     </script>

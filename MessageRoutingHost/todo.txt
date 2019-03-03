@@ -1,23 +1,31 @@
 ﻿//TODO:   
 
-Support legacy {Topic, DataArea}
-Topic hantering
-
 refactor old pages
-- Use communication factory
-- same way to handle settings
-- 
-
-- messagechart.html
-- messageviewer.html
 - publish.html
+	- publish with message, topic
 
 
+
+Topic hantering
+- different topic std (xxx.xxx.xxx or xxxx/xxx/xxx)
+- different wild card. Is that a problem
+
+- dynamic column names
+	- linechart
+	- barchart
+	- status
+
+
+Handle 
+- resetview 
+- r for reset chart
 
 
 theme
 - Producing 
 - Waiting etc
+
+- Check default text color for all themes
 
 
 

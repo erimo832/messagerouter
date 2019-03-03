@@ -24,9 +24,26 @@
         if(!found)
             dataset.push(status);
     };
+        
+    obj.orderedList = function () {
+        if (dataset.length <= 1)
+            return dataset;
+        
+        return dataset.sort(function (a, b) {
+            // ignore upper and lowercase
+            var nameA = a[cmpName].toUpperCase();
+            var nameB = b[cmpName].toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
 
-    //bug sort don't works
-    obj.orderedList = function () { return dataset.sort(function (a, b) { return (a[cmpName].toLowerCase() > b[cmpName].toLowerCase() ? 1 : 0) }); }
+            // names must be equal
+            return 0;
+        });
+    }
     
     return obj;
 }(jQuery));

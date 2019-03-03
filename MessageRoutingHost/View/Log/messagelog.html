@@ -13,14 +13,10 @@
 
     <script src="/Scripts/moment.min.js"></script>
     <script src="/Scripts/Chart.js"></script>
-    
-    <script src="/Scripts/messagerouterconnection.js"></script>
+        
     <script src="/Scripts/common.js"></script>
     <script src="/Scripts/theme.js"></script>
     <script src="/Scripts/datetime.js"></script>
-    <!--<script src="/Scripts/View/commoncharts.js"></script>
-    <script src="/Scripts/View/datamanager.js"></script>
-    <script src="/Scripts/View/chartmanager.js"></script>-->
 
     <script src="/Scripts/Communication/communicationfactory.js"></script>
     <script src="/Scripts/Communication/mqttConnection.js"></script>
@@ -53,7 +49,7 @@
                     topic: getQueryParam("topic"), //connection
                     name: getQueryParam("name"), //connection
                     protocol: getQueryParam("protocol", "signalr"),
-                    brokerurl: getQueryParam("brokerurl"),
+                    brokerurl: getQueryParam("brokerurl", "localhost"),
                     port: getQueryParam("port", 1883)
                 },
                 fontSize: getQueryParam("size", 16), //chart, label
@@ -70,8 +66,7 @@
         var connection;
 
         var messageReceived = function (message, topic) {
-            var msg = jQuery.parseJSON(message);
-            
+
             params.internal.currentcount++;
 
             if (params.internal.currentcount > params.internal.rowsToShow) {
@@ -82,7 +77,7 @@
             var timeStamp = getFormatedTime();
 
             //add new message post
-            $('#msgList').prepend('<li class="">' + timeStamp + ' <div>' + syntaxHighlight(msg) + '</div></li>');
+            $('#msgList').prepend('<li class="">' + timeStamp + ' <div>' + syntaxHighlight(message) + '</div></li>');
             
         };
 

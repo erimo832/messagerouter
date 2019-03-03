@@ -24,3 +24,11 @@
 
     return obj;
 }(jQuery));
+
+
+function parsePayload(payload) {
+    var msg = jQuery.parseJSON(payload);
+
+    /*Legacy support for {Topic: ".." DataArea:"..."} messages*/
+    return msg.DataArea ? msg.DataArea : msg;
+}

@@ -23,7 +23,7 @@
         //Some other 
         var currentCnt = 0;
         var rowcnt = getQueryParam("rowcnt", 10);
-        var brokerUrl = getQueryParam("brokerUrl", "broker.mqttdashboard.com");
+        var brokerUrl = getQueryParam("brokerUrl", "localhost");
         var brokerport = Number(getQueryParam("brokerport", 8000));
         var topic = replaceAll(replaceAll(getQueryParam("topic", "#"), "$", "#"), "!", "/");
 

@@ -14,10 +14,9 @@ Chart.defaults.global.defaultFontStyle = "bold";
     var connectionMgr = null;
     
     /* Callbacks */
-    var messageReceived = function (message, topic) {
-        var dataPoint = jQuery.parseJSON(message);
+    var messageReceived = function (message, topic) {       
 
-        dataMgr.add(dataPoint);
+        dataMgr.add(message);
 
         draw(getConfig());
     };

@@ -12,9 +12,7 @@
 
     <script src="/Scripts/moment.min.js"></script>
     <script src="/Scripts/Chart.js"></script>
-
-
-    <script src="/Scripts/messagerouterconnection.js"></script>
+    
     <script src="/Scripts/common.js"></script>
     <script src="/Scripts/theme.js"></script>
     <script src="/Scripts/datetime.js"></script>
@@ -55,9 +53,9 @@
                 },
                 communication: {
                     topic: getQueryParam("topic"), //connection
-                    name: getQueryParam("name"), //connection
+                    name: getQueryParam("name", "NotDefined"), //connection
                     protocol: getQueryParam("protocol", "signalr"),
-                    brokerurl: getQueryParam("brokerurl"),
+                    brokerurl: getQueryParam("brokerurl", "localhost"),
                     port: getQueryParam("port", 1883)
                 },
                 chart: {
