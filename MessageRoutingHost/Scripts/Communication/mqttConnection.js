@@ -1,10 +1,12 @@
 ﻿var mqttConnection = (function ($) {
     var obj = {};
-    var topic = ['#'];
+    var topic = []; //['#'];
     var config;
     var client;
+    var isConnected = false;
     
     var connectSuccess = function () {
+        isConnected = true;
         if (typeof obj.onStatusChange === "function") {
             obj.onStatusChange(obj.ConnectionEnum.Connected, "Connected to " + config.brokerurl);
         }
@@ -14,7 +16,9 @@
         }
     };
 
-    var errorConnectionLost = function (message) { 
+    var errorConnectionLost = function (message) {
+        isConnected = false;
+
         if (typeof obj.onError === "function") {
             obj.onError(message.errorMessage);
         }
@@ -30,7 +34,7 @@
             }
 
             startConnection();
-        }, 10000);
+        }, 5000);
     };
 
     //Connect Options
@@ -69,6 +73,21 @@
         config = settings;
         
         startConnection();
+    };
+    obj.addSubscriptions = function (topics) {
+        topic = topics.split(",");
+    };
+    obj.publish = function (message, topic) {
+        if (isConnected) {
+            var msg = new Messaging.Message(message);
+            msg.destinationName = topic;
+            msg.qos = 1; // 0=At most once,1=At least once, 2=Exactly once
+            client.send(msg);
+        } else {
+            if (typeof obj.onError === "function") {
+                obj.onError("Not connected so unable to publish");
+            }
+        }
     };
 
     return obj;

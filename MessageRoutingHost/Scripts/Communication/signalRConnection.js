@@ -1,7 +1,7 @@
 ﻿var signalrConnection = (function ($) {
     var obj = {};
     var hub;
-    var topic = ['#'];
+    var topic = [];//['#'];
     var name = "NoDefinedName";
     
     //private        
@@ -54,7 +54,9 @@
 
     function startSubscription(srv) {        
         //connect to server
-        srv.server.subscribe(name, topic);
+        if (topic.length > 0) {
+            srv.server.subscribe(name, topic);
+        }
     }
 
     //public
@@ -68,11 +70,23 @@
         if (settings.name)
             name = settings.name;
         
-        if (settings.topic) {
-            topic = settings.topic.split(",");;
-        }
+        //if (settings.topic) {
+        //    topic = settings.topic.split(",");
+        //}
         
         registerEvents(hub);
+    };
+    obj.addSubscriptions = function (topics) {
+        topic = topics.split(",");
+    };
+    obj.publish = function (message, topic) {
+        if ($.connection.hub && $.connection.hub.state === 1) {
+            hub.server.publish(message, topic);
+        } else {
+            if (typeof obj.onError === "function") {
+                obj.onError("Not connected so unable to publish");
+            }
+        }
     };
 
     return obj;

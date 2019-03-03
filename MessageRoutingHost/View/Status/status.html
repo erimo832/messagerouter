@@ -42,7 +42,7 @@
                     height: getQueryParam("height") //chart
                 },
                 communication: {
-                    topic: getQueryParam("topic"), //connection
+                    topic: getQueryParam("topic", "#"), //connection
                     name: getQueryParam("name", "NotDefined"), //connection
                     protocol: getQueryParam("protocol", "signalr"),
                     brokerurl: getQueryParam("brokerurl", "localhost"),
@@ -119,6 +119,7 @@
                 connection.broker.onStatusChange = communicationChanged;
                 connection.broker.onError = communicationError;
 
+                connection.broker.addSubscriptions(params.communication.topic);
                 connection.broker.connect(params.communication);
             }
         });

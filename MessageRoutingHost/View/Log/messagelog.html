@@ -46,8 +46,8 @@
                     height: getQueryParam("height") //chart
                 },
                 communication: {
-                    topic: getQueryParam("topic"), //connection
-                    name: getQueryParam("name"), //connection
+                    topic: getQueryParam("topic", "#"), //connection
+                    name: getQueryParam("name", "NotDefined"), //connection
                     protocol: getQueryParam("protocol", "signalr"),
                     brokerurl: getQueryParam("brokerurl", "localhost"),
                     port: getQueryParam("port", 1883)
@@ -107,7 +107,7 @@
             connection.broker.onStatusChange = communicationChanged;
             connection.broker.onError = communicationError;
 
-            //start connection
+            connection.broker.addSubscriptions(params.communication.topic);
             connection.broker.connect(params.communication);
         });
 

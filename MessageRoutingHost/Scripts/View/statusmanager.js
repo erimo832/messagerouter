@@ -9,6 +9,10 @@
         cmpName = compareColumn;
     };
     obj.add = function (status) {
+        //Check if invalid type
+        if (!status[cmpName])
+            return; 
+
         //Add so we don't need to know the key column name
         var found = false;
 

@@ -7,98 +7,47 @@
     <!-- theme reference -->
     <link id="theme" href="/css/themes/default.css" rel="stylesheet" />
 
-    <!--<script src="Scripts/json2.js"></script>-->
-
-    <script src="Scripts/jquery-2.2.1.min.js"></script>
-    <script src="Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="/Scripts/mqttws31.js"></script> <!-- to support MQTT protocol -->
+    <script src="/Scripts/jquery-2.2.1.min.js"></script>
+    <script src="/Scripts/jquery.signalR-2.2.0.js"></script>
     <script src="signalr/hubs"></script>
     
-    <script src="Scripts/common.js"></script>    
-    <script src="Scripts/theme.js"></script>    
+    <script src="/Scripts/common.js"></script>    
+    <script src="/Scripts/theme.js"></script>    
+
+    <script src="/Scripts/Communication/communicationfactory.js"></script>
+    <script src="/Scripts/Communication/mqttConnection.js"></script>
+    <script src="/Scripts/Communication/signalRConnection.js"></script>
 
     <script type="text/javascript">
 
 
     $(function () {
+        var params = function () {
+            var obj =
+            {                
+                communication: {
+                    topic: getQueryParam("topic", "#"), //connection
+                    name: getQueryParam("name"), //connection
+                    protocol: getQueryParam("protocol", "signalr"),
+                    brokerurl: getQueryParam("brokerurl", "localhost"),
+                    port: getQueryParam("port", 1883)
+                }
+            };
+
+            return obj;
+        }();
         
-        //Adapt new header contract
-        /*  
-            //Header part
-            version
-            propertynamehash
-            messagetype
-            bodid
-            created
-            topic
+        var connection;
+              
+        function registerButtonEvents() {
+            $('#publish').click(function () {
+                var msg = $("#messagetosend").val();
+                var topic = $('#topic').val();
+                
+                connection.broker.publish(msg, topic);
+            });
 
-            dataarea
-                Payload
-        */
-
-
-
-        // Declare a proxy to reference the hub.
-        var msghub = $.connection.messageRoutingBus;
-
-        $('#serverStatus').hide();
-        
-        /*******************************************
-        * register server events
-        *******************************************/
-
-        msghub.client.connectionEstablished = function (message) {
-            var encodedMsg = $('<div />').text(message).html();
-
-            $('#serverStatus').text(encodedMsg);
-            $('#serverStatus').show();
-
-            //Show for only 10sec
-            setTimeout(function () {
-                $('#serverStatus').hide();
-            }, 10000);
-        };
-        
-        // Start the connection.
-        $.connection.hub.start().done(function () {
-            //registerToServer();
-        });
-
-
-        $.connection.hub.disconnected(function () {
-            $('#serverStatus').text("disconnected from server, lasterror: " + $.connection.hub.lastError.message);
-            $('#serverStatus').show();
-
-            //reconnect
-            setTimeout(function () {
-                $.connection.hub.start().done(function () {                    
-                    $('#serverStatus').hide();
-                });
-            }, 5000); // Restart connection after 5 seconds.
-
-        });
-
-        $.connection.hub.reconnecting(function () {
-            $('#serverStatus').text("reconnecting to server");
-            $('#serverStatus').show();
-        });
-
-        $.connection.hub.reconnected(function () {
-            $('#serverStatus').text("reconnected to server");
-            $('#serverStatus').show();
-            //registerToServer();
-
-            //Show for only 10sec
-            setTimeout(function () {
-                $('#serverStatus').hide();
-            }, 10000);
-        });
-
-        $(document).ready(function () {
-           
-
-        });
-
-        $.connection.hub.start().done(function () {
             $('#createinfomessage').click(function () {
                 var message = {
                     Topic: $('#topic').val(),
@@ -134,34 +83,65 @@
 
                 $("#messagetosend").val(JSON.stringify(message));
             });
+        }
 
-            $('#publish').click(function () {
-                var msg = $("#messagetosend").val();
+       
+        /* Callbacks */
+        var messageReceived = function (message, topic) {
+        };
 
-                //Publish da message
-                msghub.server.publish(msg);
-            });
+        var communicationChanged = function (status, message) {
+            if (status === connection.ConnectionEnum.Connected) {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+
+                //Show for only 10sec
+                setTimeout(function () {
+                    $("#serverStatus").hide();
+                }, 10000);
+            }
+            else {
+                $("#serverStatus").text(status + ": " + message);
+                $("#serverStatus").show();
+            }
+            console.log(message);
+        };
+        var communicationError = function (message) {
+            console.log(message);
+        };
+        
+
+        $(document).ready(function () {
+            registerButtonEvents();
+        
+            connection = communicationFactory.init(params.communication.protocol);
+            connection.broker.onMessage = messageReceived;
+            connection.broker.onStatusChange = communicationChanged;
+            connection.broker.onError = communicationError;
+
+            //start connection
+            connection.broker.connect(params.communication);
+
+            $('#msgHeader').text("Messages (" + params.communication.protocol + ")")
         });
+        
 
-        $.connection.hub.start().done(function () {
-            
-        });
-
-        $.connection.hub.start().done(function () {
-            $('#publishResetAll').click(function () {
-                //Publish da message
-                msghub.server.publishResetView("all");
-            });
-            $('#publishResetChart').click(function () {
-                //Publish da message
-                msghub.server.publishResetView("chart");
-            });
-            $('#publishResetList').click(function () {
-                //Publish da message
-                msghub.server.publishResetView("list");
-            });
-        });
-
+        /* TODO: add support again for reset events
+       $.connection.hub.start().done(function () {
+           $('#publishResetAll').click(function () {
+               //Publish da message
+               msghub.server.publishResetView("all");
+           });
+           $('#publishResetChart').click(function () {
+               //Publish da message
+               msghub.server.publishResetView("chart");
+           });
+           $('#publishResetList').click(function () {
+               //Publish da message
+               msghub.server.publishResetView("list");
+           });
+       });
+       */
     });
     </script>
 </head>
@@ -169,7 +149,7 @@
     <div id="serverStatus" class="error">
     </div>
     <div>
-        <p>Messages</p>
+        <p id="msgHeader">Messages</p>
         <div>
             <input type="text" id="topic" value="topic" />
         </div>
@@ -196,41 +176,6 @@
         </div>
     </div>
 
-
-    <!--
-        
-    
-    -- Any message
-        Topic
-        ...
-
-    -- MessageObject -- (MessageViewer)
-        DataArea
-            Level
-            Text
-    
-    -- DataObject -- (barchart,linechart, scatterchart)
-        DataArea
-            Timestamp 
-            Value
-
-    -- StatusObject (status)
-        ...
-        DataArea
-            Status
-            Name
-
-
-    -->
-
-
-    <!--<div>
-        <p>Message</p>
-        <input type="text" id="topic" value="topic" />
-        <input type="text" id="level" value="level" />
-        <input type="text" id="text" value="message" />
-        <input type="button" id="publish" value="publish" />
-    </div>-->
     <div>
         <p>Publish reset events (to all subscribers)</p>
         <input type="button" id="publishResetAll" value="reset all"/>

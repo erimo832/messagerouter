@@ -52,7 +52,7 @@
                     height: getQueryParam("height") //chart
                 },
                 communication: {
-                    topic: getQueryParam("topic"), //connection
+                    topic: getQueryParam("topic", "#"), //connection
                     name: getQueryParam("name", "NotDefined"), //connection
                     protocol: getQueryParam("protocol", "signalr"),
                     brokerurl: getQueryParam("brokerurl", "localhost"),
@@ -147,6 +147,7 @@
 
         $(document).ready(function () {
             var connection = communicationFactory.init(params.communication.protocol);
+            connection.broker.addSubscriptions(params.communication.topic);
             chartManager.init("chart", "chart-container", "serverStatus", datapointManager, connection, params, getChartConfig);
         });
     });

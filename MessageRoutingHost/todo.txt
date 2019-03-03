@@ -1,10 +1,5 @@
 ﻿//TODO:   
 
-refactor old pages
-- publish.html
-	- publish with message, topic
-
-
 
 Topic hantering
 - different topic std (xxx.xxx.xxx or xxxx/xxx/xxx)
@@ -14,11 +9,7 @@ Topic hantering
 	- linechart
 	- barchart
 	- status
-
-
-Handle 
-- resetview 
-- r for reset chart
+	- messageviewer
 
 
 theme
@@ -27,6 +18,16 @@ theme
 
 - Check default text color for all themes
 
+
+
+
+Handle 
+- resetview 
+- r for reset chart
+
+refactor old pages
+- publish.html
+	- add support again for reset events
 
 
 barchart/linechart
