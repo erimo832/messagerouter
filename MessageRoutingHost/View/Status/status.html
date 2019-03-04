@@ -50,7 +50,7 @@
                 },
                 dataSettings: {
                     nameColumn: getQueryParam("nameColumn", "Name"),
-                    statusColumn: getQueryParam("statusColumn", "Status"),
+                    stateColumn: getQueryParam("statusColumn", "State")
                 },
                 fontSize: getQueryParam("size", 16), //chart, label
                 theme: getQueryParam("theme"),//layout
@@ -67,7 +67,7 @@
             $('#container').empty();
 
             for (var i = 0; i < list.length; i++) {
-                $('#container').append("<div class='" + list[i][params.dataSettings.statusColumn] + " col-sm-" + params.columnSize + "'>" + list[i][params.dataSettings.nameColumn] + "</div> "); //must have a char after span for now so we break rows
+                $('#container').append("<div class='" + list[i][params.dataSettings.stateColumn] + " col-sm-" + params.columnSize + "'>" + list[i][params.dataSettings.nameColumn] + "</div> "); //must have a char after span for now so we break rows
             }
         };
 

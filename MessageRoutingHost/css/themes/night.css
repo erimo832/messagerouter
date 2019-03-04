@@ -56,3 +56,24 @@ ul li {
     color: #AAAAAA;
     background-color: maroon
 }
+
+.Producing {
+    color: white;
+    background-color: green
+}
+
+.PartChanging {
+    color: white;
+    background-color: blue
+}
+
+.Waiting {
+    color: black;
+    background-color: lightblue
+}
+
+
+.NotActive {
+    color: orange;
+    background-color: grey
+}
