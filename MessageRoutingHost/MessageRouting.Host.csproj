@@ -101,6 +101,7 @@
     <Content Include="css\themes\c64\C64_Pro_Mono_v1.0-STYLE.eot" />
     <Content Include="css\themes\c64\C64_Pro_Mono_v1.0-STYLE.ttf" />
     <Content Include="css\themes\c64\C64_Pro_Mono_v1.0-STYLE.woff" />
+    <Content Include="css\themes\calm.css" />
     <Content Include="css\themes\terminal\Glass_TTY_VT220.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -1,0 +1,84 @@
+﻿body {
+    margin: 0;
+    background-color: #343434;
+    /*white-space: nowrap;*/
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0em;
+    margin: 0px;
+}
+
+ul li {
+    color: #AAAAAA;
+}
+
+.critical { 
+    color: #DDDDDD; 
+    font-size: 1.1em;
+}
+
+.time {
+    float: left;
+    padding-right: 0.5em;
+}
+
+.error {
+    color: #AAAAAA;
+}
+
+
+.chart-color {
+    color: rgba(221,221,221,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(221,221,221,0.2);
+}
+
+/* format json */
+.string { color: olive; }
+.number { color: wheat; }
+.boolean { color: wheat; }
+.null { color: wheat; }
+.key { color: brown; }
+
+/* statuses */
+.Online {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: olivedrab
+}
+
+.Offline {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: maroon
+}
+
+.Producing {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: #33ff99
+}
+
+.PartChanging {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: #4169E1
+
+}
+
+.Waiting {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: #4682B4
+}
+
+
+.NotActive {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: #FA8072
+}
