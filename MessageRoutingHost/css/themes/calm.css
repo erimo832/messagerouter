@@ -53,32 +53,27 @@ ul li {
 
 .Offline {
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    background-color: maroon
+    background-color: 474647
 }
 
 .Producing {
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    background-color: #33ff99
+    background-color: #97CC04
 }
 
 .PartChanging {
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    background-color: #4169E1
+    background-color: #97CC04
 
 }
 
 .Waiting {
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    background-color: #4682B4
+    background-color: #2D7DD2
 }
 
 
 .NotActive {
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-    background-color: #FA8072
+    background-color: #F45D01
 }
