@@ -6,6 +6,8 @@
     var saveWindowSec = 36000; //10h
     var timestampColumnName = "Timestamp";
     var valueColumnName = "Value";
+    var isCompleteDataSetReceived = false;
+    var dataListProperty = "Data";
 
     function clearOldData() {
         var latest = dataset[dataset.length - 1];
@@ -24,15 +26,21 @@
     }
     
     //public functions
-    obj.init = function (maxNumberOfDataPoints, saveWindowSeconds, colTimestamp, colValue) {
+    obj.init = function (maxNumberOfDataPoints, saveWindowSeconds, colTimestamp, colValue, isComplete, colDataList) {
         maxdataPoints = maxNumberOfDataPoints;
         saveWindowSec = saveWindowSeconds;
         timestampColumnName = colTimestamp;
         valueColumnName = colValue;
+        isCompleteDataSetReceived = isComplete;
+        dataListProperty = colDataList;
     };
     obj.add = function (dataPoint) {
-        dataset.push(dataPoint);
-        clearOldData();
+        if (isCompleteDataSetReceived) {
+            dataset = dataPoint[dataListProperty];
+        } else {
+            dataset.push(dataPoint);
+            clearOldData();
+        }
     };
 
     obj.getTimestampArray = function () { return dataset.map(item => { return new Date(item[timestampColumnName]); }) }; //item => (ECMA script 6), function (item) (ECMA script 5)

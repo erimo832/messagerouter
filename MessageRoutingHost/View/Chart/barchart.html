@@ -48,6 +48,8 @@
                     dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000), //chart data
                     timeStampColumn: getQueryParam("timeStampColumn", "Timestamp"),
                     valueColumn: getQueryParam("valueColumn", "Value"),
+                    isCompleteDatasetReceived: getQueryParam("iscompletedatasetreceived", false) != false ? true : false,
+                    dataListProperty: getQueryParam("datalistproperty", "Data")
                 },
                 size: {
                     width: getQueryParam("width"), //chart
@@ -63,6 +65,7 @@
                 chart: {
                     xLabelFormat: getQueryParam("xLabelFormat", 'HH:mm:ss'), //chart
                 },
+                //TODO: Refactor similar to line chart
                 fontSize: getQueryParam("size", 16), //chart, label
                 chartTimeUnit: getQueryParam("chartTimeUnit", "minute"), //chart
                 chartXAxisLabel: getQueryParam("chartXAxisLabel", ""), //chart

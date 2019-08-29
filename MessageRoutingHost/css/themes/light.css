@@ -35,6 +35,10 @@ ul li {
     color: rgba(0,0,0,0.1);
 }
 
+.chart-font-family {
+    font-family: Verdana, Geneva, sans-serif !important;
+}
+
 /* format json */
 .string { }
 .number {  }

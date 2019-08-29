@@ -16,3 +16,7 @@ ul {
 .chart-grid-color {
     color: rgba(255,216,0,0.2);
 }
+
+.chart-font-family {
+    font-family: Verdana, Geneva, sans-serif !important;
+}

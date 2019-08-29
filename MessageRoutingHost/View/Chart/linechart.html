@@ -57,6 +57,8 @@
                     dataSaveWindowSeconds: getQueryParam("dataSaveWindowSeconds", 36000), //chart data
                     timeStampColumn: getQueryParam("timeStampColumn", "Timestamp"),
                     valueColumn: getQueryParam("valueColumn", "Value"),
+                    isCompleteDatasetReceived: getQueryParam("iscompletedatasetreceived", false) != false ? true : false,
+                    dataListProperty: getQueryParam("datalistproperty", "Data")
                 },
                 size: {
                     width: getQueryParam("width"), //chart

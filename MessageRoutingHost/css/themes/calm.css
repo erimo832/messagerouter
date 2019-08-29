@@ -37,6 +37,10 @@ ul li {
     color: rgba(221,221,221,0.2);
 }
 
+.chart-font-family {
+    font-family: Verdana, Geneva, sans-serif !important;
+}
+
 /* format json */
 .string { color: olive; }
 .number { color: wheat; }
