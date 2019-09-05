@@ -1,0 +1,83 @@
+﻿body {
+    margin: 0;
+    background-color: #282c34;
+    /*white-space: nowrap;*/
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0em;
+    margin: 0px;
+}
+
+ul li {
+    color: #AAAAAA;
+}
+
+.critical { 
+    color: #DDDDDD; 
+    font-size: 1.1em;
+}
+
+.time {
+    float: left;
+    padding-right: 0.5em;
+}
+
+.error {
+    color: #AAAAAA;
+}
+
+
+.chart-color {
+    color: rgba(221,221,221,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(221,221,221,0.2);
+}
+
+.chart-font-family {
+    font-family: Verdana, Geneva, sans-serif !important;
+}
+
+/* format json */
+.string { color: olive; }
+.number { color: wheat; }
+.boolean { color: wheat; }
+.null { color: wheat; }
+.key { color: brown; }
+
+/* statuses */
+.Online {
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    background-color: olivedrab
+}
+
+.Offline {
+    color: white;
+    background-color: 474647
+}
+
+.Producing {
+    color: white;
+    background-color: #97CC04
+}
+
+.PartChanging {
+    color: white;
+    background-color: #97CC04
+
+}
+
+.Waiting {
+    color: white;
+    background-color: #2D7DD2
+}
+
+
+.NotActive {
+    color: white;
+    background-color: #F45D01
+}
