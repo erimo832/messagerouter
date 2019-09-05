@@ -1,0 +1,83 @@
+﻿body {
+    margin: 0;
+    background-color: #282c34;
+    /*white-space: nowrap;*/
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0em;
+    margin: 0px;
+}
+
+ul li {
+    color: #AAAAAA;
+}
+
+.critical { 
+    color: #DDDDDD; 
+    font-size: 1.1em;
+}
+
+.time {
+    float: left;
+    padding-right: 0.5em;
+}
+
+.error {
+    color: #AAAAAA;
+}
+
+
+.chart-color {
+    color: rgba(221,221,221,0.8);
+}
+
+.chart-grid-color {
+    color: rgba(221,221,221,0.2);
+}
+
+.chart-font-family {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* format json */
+.string { color: olive; }
+.number { color: wheat; }
+.boolean { color: wheat; }
+.null { color: wheat; }
+.key { color: brown; }
+
+/* statuses */
+.Online {
+    padding: 0.1em;
+    color: #AAAAAA;
+    background-color: olivedrab
+}
+
+.Offline {
+    padding: 0.1em;
+    color: #AAAAAA;
+    background-color: maroon
+}
+
+.Producing {
+    color: white;
+    background-color: green
+}
+
+.PartChanging {
+    color: white;
+    background-color: blue
+}
+
+.Waiting {
+    color: black;
+    background-color: lightblue
+}
+
+
+.NotActive {
+    color: orange;
+    background-color: grey
+}
